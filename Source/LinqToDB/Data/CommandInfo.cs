@@ -1241,7 +1241,7 @@ namespace LinqToDB.Data
 				dataConnection.CurrentCommand!.Parameters.Add(p);
 			}
 
-			dataConnection.LastParameters = dataConnection.CurrentCommand!.Parameters;
+			dataConnection.SaveLastParameters(dataConnection.CurrentCommand!);
 		}
 
 		static object ConvertParameterValue<TFrom>(TFrom value, MappingSchema mappingSchema)
@@ -1267,19 +1267,12 @@ namespace LinqToDB.Data
 
 		static void RebindParameters(DataConnection dataConnection, DataParameter[] parameters)
 		{
-			var dbParameters = dataConnection.LastParameters;
-
-			if (dbParameters == null)
-				return;
-
-			for (var i = 0; i < parameters.Length; i++)
+			foreach (var dataParameter in parameters)
 			{
-				var dataParameter = parameters[i];
-
 				if (dataParameter.Direction.HasValue &&
 					(dataParameter.Direction == ParameterDirection.Output || dataParameter.Direction == ParameterDirection.InputOutput || dataParameter.Direction == ParameterDirection.ReturnValue))
 				{
-					var dbParameter      = (IDbDataParameter)dbParameters[i]!;
+					var dbParameter      = dataConnection.LastParameters[dataParameter.Name!];
 					dataParameter.Output = dbParameter;
 
 					if (!object.Equals(dataParameter.Value, dbParameter.Value))

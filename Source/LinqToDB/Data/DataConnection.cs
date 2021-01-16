@@ -1182,10 +1182,11 @@ namespace LinqToDB.Data
 		/// </summary>
 		public string? LastQuery { get; private set; }
 
+		private readonly Dictionary<string, DbParameter> _lastParameters = new Dictionary<string, DbParameter>();
 		/// <summary>
 		/// Contains last parameters, sent to database using current connection.
 		/// </summary>
-		public IDataParameterCollection? LastParameters { get; internal set; }
+		public IReadOnlyDictionary<string, DbParameter> LastParameters => _lastParameters;
 
 		internal void InitCommand(CommandType commandType, string sql, DataParameter[]? parameters, List<string>? queryHints, bool withParameters)
 		{
@@ -1207,8 +1208,16 @@ namespace LinqToDB.Data
 					_command = args.Command;
 			}
 
-			LastQuery      = _command.CommandText;
-			LastParameters = _command.Parameters;
+			LastQuery = _command.CommandText;
+			SaveLastParameters(_command);
+		}
+
+		internal void SaveLastParameters(IDbCommand command)
+		{
+			_lastParameters.Clear();
+			foreach (DbParameter? param in command.Parameters)
+				if (param != null)
+					_lastParameters.Add(param.ParameterName, param);
 		}
 
 		private int? _commandTimeout;

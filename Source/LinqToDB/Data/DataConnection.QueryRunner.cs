@@ -456,7 +456,7 @@ namespace LinqToDB.Data
 					foreach (var p in dbParameters!)
 						dataConnection.CurrentCommand!.Parameters.Add(p);
 
-					dataConnection.LastParameters = dataConnection.CurrentCommand!.Parameters;
+					dataConnection.SaveLastParameters(dataConnection.CurrentCommand!);
 				}
 			}
 

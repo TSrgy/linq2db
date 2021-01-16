@@ -1727,7 +1727,7 @@ namespace Tests.DataProvider
 			var ret = dataConnection.ExecuteProc("[Issue1897]",
 				new DataParameter("@return", null, DataType.Int32) { Direction = ParameterDirection.ReturnValue });
 
-			@return = Converter.ChangeTypeTo<int>(((IDbDataParameter)dataConnection.LastParameters!["@return"]).Value);
+			@return = Converter.ChangeTypeTo<int>(dataConnection.LastParameters["@return"].Value);
 
 			return ret;
 		}

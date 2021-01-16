@@ -1751,9 +1751,8 @@ namespace Tests.Data
 			}
 		}
 
-		// test which providers clear parameters collection after both command and data reader disposed
 		[Test]
-		public void MARS_ParametersClearedAfterDispose([DataSources(false)] string context)
+		public void MARS_ParametersPreservedAfterDispose([DataSources(false)] string context)
 		{
 			using (var db = new TestDataConnection(context))
 			{
@@ -1761,17 +1760,12 @@ namespace Tests.Data
 
 				db.Person.Where(_ => _.LastName == param).ToList();
 
-				var expected = 1;
-				if (context == ProviderName.Sybase || context.Contains("SQLite.Classic"))
-					expected = 0;
-
-				Assert.AreEqual(expected, db.LastParameters!.Count);
+				Assert.AreEqual(1, db.LastParameters.Count);
 			}
 		}
 
-		// test which providers clear parameters collection after both command and data reader disposed
 		[Test]
-		public async Task MARS_ParametersClearedAfterDisposeAsync([DataSources(false)] string context)
+		public async Task MARS_ParametersPreservedAfterDisposeAsync([DataSources(false)] string context)
 		{
 			using (var db = new TestDataConnection(context))
 			{
@@ -1779,11 +1773,7 @@ namespace Tests.Data
 
 				await db.Person.Where(_ => _.LastName == param).ToListAsync();
 
-				var expected = 1;
-				if (context == ProviderName.Sybase || context.Contains("SQLite.Classic"))
-					expected = 0;
-
-				Assert.AreEqual(expected, db.LastParameters!.Count);
+				Assert.AreEqual(1, db.LastParameters.Count);
 			}
 		}
 

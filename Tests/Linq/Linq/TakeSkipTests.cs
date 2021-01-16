@@ -29,7 +29,7 @@ namespace Tests.Linq
 
 			// check only strong providers
 			if (!inline && db.DataProvider.SqlProviderFlags.AcceptsTakeAsParameter && db.DataProvider.SqlProviderFlags.AcceptsTakeAsParameterIfSkip)
-				Assert.That(db.LastParameters!.Count, Is.GreaterThan(additional));
+				Assert.That(db.LastParameters.Count, Is.GreaterThan(additional));
 		}
 
 		static void CheckTakeSkipParameterized(IDataContext dc, int additional = 0)

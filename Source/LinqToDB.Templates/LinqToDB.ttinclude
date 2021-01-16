@@ -925,7 +925,7 @@ void GenerateTypesFromMetadata()
 						p.BodyBuilders.Add(() => new []
 						{
 							string.Format(
-								"{0} {1}= Converter.ChangeTypeTo<{2}>{3}(((IDbDataParameter)dataConnection.LastParameters![{4}]).{5}Value);",
+								"{0} {1}= Converter.ChangeTypeTo<{2}>{3}(dataConnection.LastParameters[{4}].{5}Value);",
 								pr.ParameterName,
 								LenDiff(maxLenParam,  pr.ParameterName),
 								pr.Type.ToTypeName(),

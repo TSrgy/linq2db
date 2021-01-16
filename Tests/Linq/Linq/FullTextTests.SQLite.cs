@@ -499,9 +499,9 @@ namespace Tests.Linq
 				{
 					Assert.AreEqual("INSERT INTO [FTS5_TABLE]([FTS5_TABLE], rowid, [text1], [text2]) VALUES('delete', 2, @p0, @p1)", db.LastQuery);
 
-					Assert.AreEqual(2, db.LastParameters!.Count);
-					Assert.AreEqual("one", ((DbParameter)db.LastParameters![0]!).Value);
-					Assert.AreEqual("two", ((DbParameter)db.LastParameters![1]!).Value);
+					Assert.AreEqual(2, db.LastParameters.Count);
+					Assert.AreEqual("one", db.LastParameters["@p0"].Value);
+					Assert.AreEqual("two", db.LastParameters["@p1"].Value);
 				}
 			}
 		}
@@ -635,8 +635,8 @@ namespace Tests.Linq
 				{
 					Assert.AreEqual("INSERT INTO [FTS5_TABLE]([FTS5_TABLE], rank) VALUES('rank', @rank)", db.LastQuery);
 
-					Assert.AreEqual(1, db.LastParameters!.Count);
-					Assert.AreEqual("strange('function\")", ((DbParameter)db.LastParameters![0]!).Value);
+					Assert.AreEqual(1, db.LastParameters.Count);
+					Assert.AreEqual("strange('function\")", db.LastParameters["@rank"].Value);
 				}
 			}
 		}

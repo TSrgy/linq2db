@@ -874,10 +874,9 @@ namespace Tests.DataProvider
 
 				query.FirstOrDefault();
 
-				Assert.That(db.LastParameters!.Count, Is.EqualTo(2));
+				Assert.That(db.LastParameters.Count, Is.EqualTo(2));
 
-				var parm = (IDbDataParameter)db.LastParameters![0]!;
-				Assert.That(parm.DbType, Is.EqualTo(DbType.Date));
+				Assert.True(db.LastParameters.Values.Any(p => p.DbType == DbType.Date));
 			}
 		}
 
@@ -894,10 +893,9 @@ namespace Tests.DataProvider
 
 				query.FirstOrDefault();
 
-				Assert.That(db.LastParameters!.Count, Is.EqualTo(2));
+				Assert.That(db.LastParameters.Count, Is.EqualTo(2));
 
-				var parm = (IDbDataParameter)db.LastParameters![0]!;
-				Assert.That(parm.DbType, Is.EqualTo(DbType.Date));
+				Assert.True(db.LastParameters.Values.Any(p => p.DbType == DbType.Date));
 			}
 		}
 
