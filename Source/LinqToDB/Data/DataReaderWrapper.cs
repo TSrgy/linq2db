@@ -13,6 +13,7 @@ namespace LinqToDB.Data
 		, IAsyncDisposable
 #endif
 	{
+		private          bool            _disposed;
 		private readonly DataConnection? _dataConnection;
 
 		internal DataReaderWrapper(DbDataReader dataReader)
@@ -28,10 +29,15 @@ namespace LinqToDB.Data
 		}
 
 		public  DbDataReader? DataReader { get; private set; }
-		internal IDbCommand?  Command    { get; private set; }
+		internal IDbCommand?  Command    { get; }
 
 		public void Dispose()
 		{
+			if (_disposed)
+				return;
+
+			_disposed = true;
+
 			if (DataReader != null)
 			{
 				DataReader.Dispose();
@@ -44,14 +50,17 @@ namespace LinqToDB.Data
 					_dataConnection.DataProvider.DisposeCommand(Command);
 				else
 					Command.Dispose();
-
-				Command = null;
 			}
 		}
 
 #if NETSTANDARD2_1PLUS
 		public async ValueTask DisposeAsync()
 		{
+			if (_disposed)
+				return;
+
+			_disposed = true;
+
 			if (DataReader != null)
 			{
 				await DataReader.DisposeAsync().ConfigureAwait(Common.Configuration.ContinueOnCapturedContext);
@@ -64,8 +73,6 @@ namespace LinqToDB.Data
 					_dataConnection.DataProvider.DisposeCommand(Command);
 				else
 					Command.Dispose();
-
-				Command = null;
 			}
 		}
 #elif !NETFRAMEWORK

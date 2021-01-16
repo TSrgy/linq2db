@@ -1445,7 +1445,7 @@ namespace LinqToDB.Data
 
 		DataReaderWrapper ExecuteReader()
 		{
-			return ExecuteReader(CommandBehavior.Default);
+			return ExecuteDataReader(CommandBehavior.Default);
 		}
 
 		internal DataReaderWrapper ExecuteDataReader(CommandBehavior commandBehavior)
@@ -1479,7 +1479,7 @@ namespace LinqToDB.Data
 					OnTraceConnection(new TraceInfo(this, TraceInfoStep.AfterExecute)
 					{
 						TraceLevel     = TraceLevel.Info,
-						Command        = CurrentCommand,
+						Command        = ret.Command,
 						StartTime      = now,
 						ExecutionTime  = sw.Elapsed,
 					});

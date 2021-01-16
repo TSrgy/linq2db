@@ -40,8 +40,9 @@ namespace LinqToDB.Data
 			readonly DateTime       _startedOn = DateTime.UtcNow;
 			readonly Stopwatch      _stopwatch = Stopwatch.StartNew();
 
-			bool        _isAsync;
-			Expression? _mapperExpression;
+			bool               _isAsync;
+			Expression?        _mapperExpression;
+			DataReaderWrapper? _dataReader;
 
 			public override Expression? MapperExpression
 			{
@@ -128,7 +129,7 @@ namespace LinqToDB.Data
 					_dataConnection.OnTraceConnection(new TraceInfo(_dataConnection, TraceInfoStep.Completed)
 					{
 						TraceLevel       = TraceLevel.Info,
-						Command          = _dataConnection.CurrentCommand,
+						Command          = _dataReader?.Command ?? _dataConnection.CurrentCommand,
 						MapperExpression = MapperExpression,
 						StartTime        = _startedOn,
 						ExecutionTime    = _stopwatch.Elapsed,
@@ -136,6 +137,8 @@ namespace LinqToDB.Data
 						IsAsync          = _isAsync,
 					});
 				}
+
+				_dataReader = null;
 
 				base.Dispose();
 			}
@@ -477,7 +480,7 @@ namespace LinqToDB.Data
 
 				InitFirstCommand(_dataConnection, _executionQuery!);
 
-				return _dataConnection.ExecuteReader();
+				return _dataReader = _dataConnection.ExecuteReader();
 			}
 
 			#endregion
@@ -527,9 +530,9 @@ namespace LinqToDB.Data
 
 				InitFirstCommand(_dataConnection, _executionQuery!);
 
-				var dataReader = await _dataConnection.ExecuteDataReaderAsync(_dataConnection.GetCommandBehavior(CommandBehavior.Default), cancellationToken).ConfigureAwait(Configuration.ContinueOnCapturedContext);
+				_dataReader = await _dataConnection.ExecuteDataReaderAsync(_dataConnection.GetCommandBehavior(CommandBehavior.Default), cancellationToken).ConfigureAwait(Configuration.ContinueOnCapturedContext);
 
-				return new DataReaderAsync(dataReader);
+				return new DataReaderAsync(_dataReader);
 			}
 
 			public override async Task<int> ExecuteNonQueryAsync(CancellationToken cancellationToken)
