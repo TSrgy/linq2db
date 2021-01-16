@@ -452,7 +452,7 @@ namespace OracleDataContext
 		#region Associations
 
 		/// <summary>
-		/// SYS_C00804272_BackReference
+		/// SYS_C00814380_BackReference
 		/// </summary>
 		[Association(ThisKey="UserId", OtherKey="UserId", CanBeNull=true, Relationship=LinqToDB.Mapping.Relationship.OneToMany, IsBackReference=true)]
 		public IEnumerable<TTestUserContract> Syscs { get; set; } = null!;
@@ -471,9 +471,9 @@ namespace OracleDataContext
 		#region Associations
 
 		/// <summary>
-		/// SYS_C00804272
+		/// SYS_C00814380
 		/// </summary>
-		[Association(ThisKey="UserId", OtherKey="UserId", CanBeNull=false, Relationship=LinqToDB.Mapping.Relationship.ManyToOne, KeyName="SYS_C00804272", BackReferenceName="Syscs")]
+		[Association(ThisKey="UserId", OtherKey="UserId", CanBeNull=false, Relationship=LinqToDB.Mapping.Relationship.ManyToOne, KeyName="SYS_C00814380", BackReferenceName="Syscs")]
 		public TTestUser User { get; set; } = null!;
 
 		#endregion
@@ -517,10 +517,10 @@ namespace OracleDataContext
 				new DataParameter("POUTPUTSTR", null,      LinqToDB.DataType.NVarChar) { Direction = ParameterDirection.Output },
 				new DataParameter("PINPUTOUTPUTSTR", PINPUTOUTPUTSTR, LinqToDB.DataType.NVarChar) { Direction = ParameterDirection.InputOutput });
 
-			POUTPUTID       = Converter.ChangeTypeTo<decimal?>(((IDbDataParameter)dataConnection.LastParameters!["POUTPUTID"]).      Value);
-			PINPUTOUTPUTID  = Converter.ChangeTypeTo<decimal?>(((IDbDataParameter)dataConnection.LastParameters!["PINPUTOUTPUTID"]). Value);
-			POUTPUTSTR      = Converter.ChangeTypeTo<string?> (((IDbDataParameter)dataConnection.LastParameters!["POUTPUTSTR"]).     Value);
-			PINPUTOUTPUTSTR = Converter.ChangeTypeTo<string?> (((IDbDataParameter)dataConnection.LastParameters!["PINPUTOUTPUTSTR"]).Value);
+			POUTPUTID       = Converter.ChangeTypeTo<decimal?>(dataConnection.LastParameters["POUTPUTID"].      Value);
+			PINPUTOUTPUTID  = Converter.ChangeTypeTo<decimal?>(dataConnection.LastParameters["PINPUTOUTPUTID"]. Value);
+			POUTPUTSTR      = Converter.ChangeTypeTo<string?> (dataConnection.LastParameters["POUTPUTSTR"].     Value);
+			PINPUTOUTPUTSTR = Converter.ChangeTypeTo<string?> (dataConnection.LastParameters["PINPUTOUTPUTSTR"].Value);
 
 			return ret;
 		}
@@ -536,8 +536,8 @@ namespace OracleDataContext
 				new DataParameter("POUTPUTSTR", null,      LinqToDB.DataType.NVarChar) { Direction = ParameterDirection.Output },
 				new DataParameter("PINPUTOUTPUTSTR", PINPUTOUTPUTSTR, LinqToDB.DataType.NVarChar) { Direction = ParameterDirection.InputOutput });
 
-			POUTPUTSTR      = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["POUTPUTSTR"]).     Value);
-			PINPUTOUTPUTSTR = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["PINPUTOUTPUTSTR"]).Value);
+			POUTPUTSTR      = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["POUTPUTSTR"].     Value);
+			PINPUTOUTPUTSTR = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["PINPUTOUTPUTSTR"].Value);
 
 			return ret;
 		}

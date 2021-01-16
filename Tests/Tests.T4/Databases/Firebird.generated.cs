@@ -211,9 +211,9 @@ namespace FirebirdDataContext
 		#region Associations
 
 		/// <summary>
-		/// INTEG_3724
+		/// INTEG_3823
 		/// </summary>
-		[Association(ThisKey="PersonID", OtherKey="PersonID", CanBeNull=false, Relationship=LinqToDB.Mapping.Relationship.OneToOne, KeyName="INTEG_3724", BackReferenceName="INTEG")]
+		[Association(ThisKey="PersonID", OtherKey="PersonID", CanBeNull=false, Relationship=LinqToDB.Mapping.Relationship.OneToOne, KeyName="INTEG_3823", BackReferenceName="INTEG")]
 		public Person Person { get; set; } = null!;
 
 		#endregion
@@ -237,7 +237,7 @@ namespace FirebirdDataContext
 		public Doctor? Doctor { get; set; }
 
 		/// <summary>
-		/// INTEG_3724_BackReference
+		/// INTEG_3823_BackReference
 		/// </summary>
 		[Association(ThisKey="PersonID", OtherKey="PersonID", CanBeNull=true, Relationship=LinqToDB.Mapping.Relationship.OneToOne, IsBackReference=true)]
 		public Patient? INTEG { get; set; }
@@ -343,8 +343,8 @@ namespace FirebirdDataContext
 				new DataParameter("INPUTOUTPUTSTR", null, LinqToDB.DataType.NVarChar) { Direction = ParameterDirection.Output, Size = 50 },
 				new DataParameter("OUTPUTSTR", null,      LinqToDB.DataType.NVarChar) { Direction = ParameterDirection.Output, Size = 50 }).ToList();
 
-			INPUTOUTPUTSTR = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["INPUTOUTPUTSTR"]).Value);
-			OUTPUTSTR      = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["OUTPUTSTR"]).     Value);
+			INPUTOUTPUTSTR = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["INPUTOUTPUTSTR"].Value);
+			OUTPUTSTR      = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["OUTPUTSTR"].     Value);
 
 			return ret;
 		}
@@ -371,10 +371,10 @@ namespace FirebirdDataContext
 				new DataParameter("OUTPUTID", null,       LinqToDB.DataType.Int32) { Direction = ParameterDirection.Output, Size = 4 },
 				new DataParameter("OUTPUTSTR", null,      LinqToDB.DataType.NVarChar) { Direction = ParameterDirection.Output, Size = 50 }).ToList();
 
-			INPUTOUTPUTID  = Converter.ChangeTypeTo<int?>   (((IDbDataParameter)dataConnection.LastParameters!["INPUTOUTPUTID"]). Value);
-			INPUTOUTPUTSTR = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["INPUTOUTPUTSTR"]).Value);
-			OUTPUTID       = Converter.ChangeTypeTo<int?>   (((IDbDataParameter)dataConnection.LastParameters!["OUTPUTID"]).      Value);
-			OUTPUTSTR      = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["OUTPUTSTR"]).     Value);
+			INPUTOUTPUTID  = Converter.ChangeTypeTo<int?>   (dataConnection.LastParameters["INPUTOUTPUTID"]. Value);
+			INPUTOUTPUTSTR = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["INPUTOUTPUTSTR"].Value);
+			OUTPUTID       = Converter.ChangeTypeTo<int?>   (dataConnection.LastParameters["OUTPUTID"].      Value);
+			OUTPUTSTR      = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["OUTPUTSTR"].     Value);
 
 			return ret;
 		}
@@ -401,12 +401,12 @@ namespace FirebirdDataContext
 				new DataParameter("GENDER", null,     LinqToDB.DataType.NChar) { Direction = ParameterDirection.Output, Size = 1 },
 				new DataParameter("DIAGNOSIS", null,  LinqToDB.DataType.NVarChar) { Direction = ParameterDirection.Output, Size = 256 }).ToList();
 
-			PERSONID   = Converter.ChangeTypeTo<int?>   (((IDbDataParameter)dataConnection.LastParameters!["PERSONID"]).  Value);
-			FIRSTNAME  = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["FIRSTNAME"]). Value);
-			LASTNAME   = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["LASTNAME"]).  Value);
-			MIDDLENAME = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["MIDDLENAME"]).Value);
-			GENDER     = Converter.ChangeTypeTo<char?>  (((IDbDataParameter)dataConnection.LastParameters!["GENDER"]).    Value);
-			DIAGNOSIS  = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["DIAGNOSIS"]). Value);
+			PERSONID   = Converter.ChangeTypeTo<int?>   (dataConnection.LastParameters["PERSONID"].  Value);
+			FIRSTNAME  = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["FIRSTNAME"]. Value);
+			LASTNAME   = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["LASTNAME"].  Value);
+			MIDDLENAME = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["MIDDLENAME"].Value);
+			GENDER     = Converter.ChangeTypeTo<char?>  (dataConnection.LastParameters["GENDER"].    Value);
+			DIAGNOSIS  = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["DIAGNOSIS"]. Value);
 
 			return ret;
 		}
@@ -435,10 +435,10 @@ namespace FirebirdDataContext
 				new DataParameter("GENDER", null,     LinqToDB.DataType.NChar) { Direction = ParameterDirection.Output, Size = 1 },
 				new DataParameter("DIAGNOSIS", null,  LinqToDB.DataType.NVarChar) { Direction = ParameterDirection.Output, Size = 256 }).ToList();
 
-			PERSONID   = Converter.ChangeTypeTo<int?>   (((IDbDataParameter)dataConnection.LastParameters!["PERSONID"]).  Value);
-			MIDDLENAME = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["MIDDLENAME"]).Value);
-			GENDER     = Converter.ChangeTypeTo<char?>  (((IDbDataParameter)dataConnection.LastParameters!["GENDER"]).    Value);
-			DIAGNOSIS  = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["DIAGNOSIS"]). Value);
+			PERSONID   = Converter.ChangeTypeTo<int?>   (dataConnection.LastParameters["PERSONID"].  Value);
+			MIDDLENAME = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["MIDDLENAME"].Value);
+			GENDER     = Converter.ChangeTypeTo<char?>  (dataConnection.LastParameters["GENDER"].    Value);
+			DIAGNOSIS  = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["DIAGNOSIS"]. Value);
 
 			return ret;
 		}
@@ -474,7 +474,7 @@ namespace FirebirdDataContext
 				new DataParameter("GENDER",   GENDER,   LinqToDB.DataType.NChar),
 				new DataParameter("PERSONID", null, LinqToDB.DataType.Int32) { Direction = ParameterDirection.Output, Size = 4 }).ToList();
 
-			PERSONID = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.LastParameters!["PERSONID"]).Value);
+			PERSONID = Converter.ChangeTypeTo<int?>(dataConnection.LastParameters["PERSONID"].Value);
 
 			return ret;
 		}
@@ -497,7 +497,7 @@ namespace FirebirdDataContext
 				new DataParameter("GENDER",   GENDER,   LinqToDB.DataType.NChar),
 				new DataParameter("PERSONID", null, LinqToDB.DataType.Int32) { Direction = ParameterDirection.Output, Size = 4 }).ToList();
 
-			PERSONID = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.LastParameters!["PERSONID"]).Value);
+			PERSONID = Converter.ChangeTypeTo<int?>(dataConnection.LastParameters["PERSONID"].Value);
 
 			return ret;
 		}
@@ -520,11 +520,11 @@ namespace FirebirdDataContext
 				new DataParameter("MIDDLENAME", null, LinqToDB.DataType.NVarChar) { Direction = ParameterDirection.Output, Size = 50 },
 				new DataParameter("GENDER", null,     LinqToDB.DataType.NChar) { Direction = ParameterDirection.Output, Size = 1 }).ToList();
 
-			PERSONID   = Converter.ChangeTypeTo<int?>   (((IDbDataParameter)dataConnection.LastParameters!["PERSONID"]).  Value);
-			FIRSTNAME  = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["FIRSTNAME"]). Value);
-			LASTNAME   = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["LASTNAME"]).  Value);
-			MIDDLENAME = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["MIDDLENAME"]).Value);
-			GENDER     = Converter.ChangeTypeTo<char?>  (((IDbDataParameter)dataConnection.LastParameters!["GENDER"]).    Value);
+			PERSONID   = Converter.ChangeTypeTo<int?>   (dataConnection.LastParameters["PERSONID"].  Value);
+			FIRSTNAME  = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["FIRSTNAME"]. Value);
+			LASTNAME   = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["LASTNAME"].  Value);
+			MIDDLENAME = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["MIDDLENAME"].Value);
+			GENDER     = Converter.ChangeTypeTo<char?>  (dataConnection.LastParameters["GENDER"].    Value);
 
 			return ret;
 		}
@@ -552,11 +552,11 @@ namespace FirebirdDataContext
 				new DataParameter("MIDDLENAME", null, LinqToDB.DataType.NVarChar) { Direction = ParameterDirection.Output, Size = 50 },
 				new DataParameter("GENDER", null,     LinqToDB.DataType.NChar) { Direction = ParameterDirection.Output, Size = 1 }).ToList();
 
-			PERSONID   = Converter.ChangeTypeTo<int?>   (((IDbDataParameter)dataConnection.LastParameters!["PERSONID"]).  Value);
-			FIRSTNAME  = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["FIRSTNAME"]). Value);
-			LASTNAME   = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["LASTNAME"]).  Value);
-			MIDDLENAME = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["MIDDLENAME"]).Value);
-			GENDER     = Converter.ChangeTypeTo<char?>  (((IDbDataParameter)dataConnection.LastParameters!["GENDER"]).    Value);
+			PERSONID   = Converter.ChangeTypeTo<int?>   (dataConnection.LastParameters["PERSONID"].  Value);
+			FIRSTNAME  = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["FIRSTNAME"]. Value);
+			LASTNAME   = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["LASTNAME"].  Value);
+			MIDDLENAME = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["MIDDLENAME"].Value);
+			GENDER     = Converter.ChangeTypeTo<char?>  (dataConnection.LastParameters["GENDER"].    Value);
 
 			return ret;
 		}
@@ -585,11 +585,11 @@ namespace FirebirdDataContext
 				new DataParameter("MIDDLENAME", null, LinqToDB.DataType.NVarChar) { Direction = ParameterDirection.Output, Size = 50 },
 				new DataParameter("GENDER", null,     LinqToDB.DataType.NChar) { Direction = ParameterDirection.Output, Size = 1 }).ToList();
 
-			PERSONID   = Converter.ChangeTypeTo<int?>   (((IDbDataParameter)dataConnection.LastParameters!["PERSONID"]).  Value);
-			FIRSTNAME  = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["FIRSTNAME"]). Value);
-			LASTNAME   = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["LASTNAME"]).  Value);
-			MIDDLENAME = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["MIDDLENAME"]).Value);
-			GENDER     = Converter.ChangeTypeTo<char?>  (((IDbDataParameter)dataConnection.LastParameters!["GENDER"]).    Value);
+			PERSONID   = Converter.ChangeTypeTo<int?>   (dataConnection.LastParameters["PERSONID"].  Value);
+			FIRSTNAME  = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["FIRSTNAME"]. Value);
+			LASTNAME   = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["LASTNAME"].  Value);
+			MIDDLENAME = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["MIDDLENAME"].Value);
+			GENDER     = Converter.ChangeTypeTo<char?>  (dataConnection.LastParameters["GENDER"].    Value);
 
 			return ret;
 		}
@@ -627,8 +627,8 @@ namespace FirebirdDataContext
 				new DataParameter("INTFIELD", null,    LinqToDB.DataType.Int32) { Direction = ParameterDirection.Output, Size = 4 },
 				new DataParameter("STRINGFIELD", null, LinqToDB.DataType.NVarChar) { Direction = ParameterDirection.Output, Size = 50 }).ToList();
 
-			INTFIELD    = Converter.ChangeTypeTo<int?>   (((IDbDataParameter)dataConnection.LastParameters!["INTFIELD"]).   Value);
-			STRINGFIELD = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["STRINGFIELD"]).Value);
+			INTFIELD    = Converter.ChangeTypeTo<int?>   (dataConnection.LastParameters["INTFIELD"].   Value);
+			STRINGFIELD = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["STRINGFIELD"].Value);
 
 			return ret;
 		}
@@ -649,8 +649,8 @@ namespace FirebirdDataContext
 				new DataParameter("OUTPUTINT", null,    LinqToDB.DataType.Int32) { Direction = ParameterDirection.Output, Size = 4 },
 				new DataParameter("OUTPUTSTRING", null, LinqToDB.DataType.NVarChar) { Direction = ParameterDirection.Output, Size = 50 }).ToList();
 
-			OUTPUTINT    = Converter.ChangeTypeTo<int?>   (((IDbDataParameter)dataConnection.LastParameters!["OUTPUTINT"]).   Value);
-			OUTPUTSTRING = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["OUTPUTSTRING"]).Value);
+			OUTPUTINT    = Converter.ChangeTypeTo<int?>   (dataConnection.LastParameters["OUTPUTINT"].   Value);
+			OUTPUTSTRING = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["OUTPUTSTRING"].Value);
 
 			return ret;
 		}
@@ -670,7 +670,7 @@ namespace FirebirdDataContext
 			var ret = dataConnection.QueryProc<ScalarReturnParameterResult>("\"Scalar_ReturnParameter\"",
 				new DataParameter("RETURN_VALUE", null, LinqToDB.DataType.Int32) { Direction = ParameterDirection.Output, Size = 4 }).ToList();
 
-			RETURN_VALUE = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.LastParameters!["RETURN_VALUE"]).Value);
+			RETURN_VALUE = Converter.ChangeTypeTo<int?>(dataConnection.LastParameters["RETURN_VALUE"].Value);
 
 			return ret;
 		}

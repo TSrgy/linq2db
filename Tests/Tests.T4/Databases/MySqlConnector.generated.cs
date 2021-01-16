@@ -612,7 +612,7 @@ namespace MySqlConnectorDataContext
 				new DataParameter("aInParam",  aInParam,  LinqToDB.DataType.VarChar),
 				new DataParameter("aOutParam", null, LinqToDB.DataType.SByte) { Direction = ParameterDirection.Output });
 
-			aOutParam = Converter.ChangeTypeTo<bool?>(((IDbDataParameter)dataConnection.LastParameters!["aOutParam"]).Value);
+			aOutParam = Converter.ChangeTypeTo<bool?>(dataConnection.LastParameters["aOutParam"].Value);
 
 			return ret;
 		}
@@ -628,8 +628,8 @@ namespace MySqlConnectorDataContext
 				new DataParameter("param2", param2, LinqToDB.DataType.Int32) { Direction = ParameterDirection.InputOutput },
 				new DataParameter("param1", null, LinqToDB.DataType.Int32) { Direction = ParameterDirection.Output }).ToList();
 
-			param2 = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.LastParameters!["param2"]).Value);
-			param1 = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.LastParameters!["param1"]).Value);
+			param2 = Converter.ChangeTypeTo<int?>(dataConnection.LastParameters["param2"].Value);
+			param1 = Converter.ChangeTypeTo<int?>(dataConnection.LastParameters["param1"].Value);
 
 			return ret;
 		}

@@ -485,8 +485,8 @@ namespace SapHanaDataContext
 				new DataParameter("OUTPUTSTR", null,      LinqToDB.DataType.VarChar) { Direction = ParameterDirection.Output, Size = 50 },
 				new DataParameter("INPUTOUTPUTSTR", INPUTOUTPUTSTR, LinqToDB.DataType.VarChar) { Direction = ParameterDirection.InputOutput, Size = 50 });
 
-			OUTPUTSTR      = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["OUTPUTSTR"]).     Value);
-			INPUTOUTPUTSTR = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["INPUTOUTPUTSTR"]).Value);
+			OUTPUTSTR      = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["OUTPUTSTR"].     Value);
+			INPUTOUTPUTSTR = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["INPUTOUTPUTSTR"].Value);
 
 			return ret;
 		}
@@ -505,10 +505,10 @@ namespace SapHanaDataContext
 				new DataParameter("OUTPUTSTR", null,      LinqToDB.DataType.VarChar) { Direction = ParameterDirection.Output, Size = 50 },
 				new DataParameter("INPUTOUTPUTSTR", INPUTOUTPUTSTR, LinqToDB.DataType.VarChar) { Direction = ParameterDirection.InputOutput, Size = 50 });
 
-			OUTPUTID       = Converter.ChangeTypeTo<int?>   (((IDbDataParameter)dataConnection.LastParameters!["OUTPUTID"]).      Value);
-			INPUTOUTPUTID  = Converter.ChangeTypeTo<int?>   (((IDbDataParameter)dataConnection.LastParameters!["INPUTOUTPUTID"]). Value);
-			OUTPUTSTR      = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["OUTPUTSTR"]).     Value);
-			INPUTOUTPUTSTR = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["INPUTOUTPUTSTR"]).Value);
+			OUTPUTID       = Converter.ChangeTypeTo<int?>   (dataConnection.LastParameters["OUTPUTID"].      Value);
+			INPUTOUTPUTID  = Converter.ChangeTypeTo<int?>   (dataConnection.LastParameters["INPUTOUTPUTID"]. Value);
+			OUTPUTSTR      = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["OUTPUTSTR"].     Value);
+			INPUTOUTPUTSTR = Converter.ChangeTypeTo<string?>(dataConnection.LastParameters["INPUTOUTPUTSTR"].Value);
 
 			return ret;
 		}
@@ -589,7 +589,7 @@ namespace SapHanaDataContext
 				new DataParameter("GENDER",   GENDER,   LinqToDB.DataType.Char),
 				new DataParameter("PERSONID", null, LinqToDB.DataType.Int32) { Direction = ParameterDirection.Output, Size = 10 });
 
-			PERSONID = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.LastParameters!["PERSONID"]).Value);
+			PERSONID = Converter.ChangeTypeTo<int?>(dataConnection.LastParameters["PERSONID"].Value);
 
 			return ret;
 		}
