@@ -284,8 +284,8 @@ namespace LinqToDB.Data
 			static IDbDataParameter CreateParameter(DataConnection dataConnection, SqlParameter parameter, SqlParameterValue parmValue)
 			{
 				// this is not very nice: here we access command object before it initialized
-				// command initializer could create new command (which is already done by db2 and oracle providers)
-				// fortunatelly it works with those providers
+				// and it could result in parameter being created from one command object, but assigned to another command
+				// currently not an issue as it still works for supported providers
 				var p          = dataConnection.GetOrCreateCommand().CreateParameter();
 				var dbDataType = parmValue.DbDataType;
 				var paramValue = parameter.CorrectParameterValue(parmValue.Value);
