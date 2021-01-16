@@ -458,9 +458,9 @@ namespace LinqToDB.Data
 				{
 					foreach (var p in dbParameters!)
 						dataConnection.CurrentCommand!.Parameters.Add(p);
-
-					dataConnection.SaveLastParameters(dataConnection.CurrentCommand!);
 				}
+
+				dataConnection.CommitCommandInit();
 			}
 
 			#region ExecuteReader

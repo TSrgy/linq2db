@@ -1198,24 +1198,23 @@ namespace LinqToDB.Data
 			}
 
 			_command = DataProvider.InitCommand(this, GetOrCreateCommand(), commandType, sql, parameters, withParameters);
+		}
 
+		internal void CommitCommandInit()
+		{
 			var initEvent = OnCommandInitialized;
 			if (initEvent != null)
 			{
-				var args = new OnCommandInitializedEventArgs(this, _command);
+				var args = new OnCommandInitializedEventArgs(this, _command!);
 				initEvent(args);
 				if (args.CommandChanged)
 					_command = args.Command;
 			}
 
-			LastQuery = _command.CommandText;
-			SaveLastParameters(_command);
-		}
+			LastQuery = _command!.CommandText;
 
-		internal void SaveLastParameters(IDbCommand command)
-		{
 			_lastParameters.Clear();
-			foreach (DbParameter? param in command.Parameters)
+			foreach (DbParameter? param in _command.Parameters)
 				if (param != null)
 					_lastParameters.Add(param.ParameterName, param);
 		}

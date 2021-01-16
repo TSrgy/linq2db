@@ -15,6 +15,7 @@ using JetBrains.Annotations;
 namespace LinqToDB.Data
 {
 	using System.Diagnostics.CodeAnalysis;
+	using System.Runtime.CompilerServices;
 	using Async;
 	using Common;
 	using Expressions;
@@ -154,12 +155,7 @@ namespace LinqToDB.Data
 		/// <returns>Returns collection of query result records.</returns>
 		public IEnumerable<T> Query<T>(Func<IDataReader,T> objectReader)
 		{
-			var hasParameters = Parameters?.Length > 0;
-
-			DataConnection.InitCommand(CommandType, CommandText, Parameters, null, hasParameters);
-
-			if (hasParameters)
-				SetParameters(DataConnection, Parameters!);
+			InitCommand();
 
 			return ReadEnumerator(
 				DataConnection.ExecuteDataReader(GetCommandBehavior()),
@@ -176,12 +172,7 @@ namespace LinqToDB.Data
 		/// <returns>Returns collection of query result records.</returns>
 		public async Task<IEnumerable<T>> QueryAsync<T>(Func<IDataReader, T> objectReader, CancellationToken cancellationToken = default)
 		{
-			var hasParameters = Parameters?.Length > 0;
-
-			DataConnection.InitCommand(CommandType, CommandText, Parameters, null, hasParameters);
-
-			if (hasParameters)
-				SetParameters(DataConnection, Parameters!);
+			InitCommand();
 
 			return ReadEnumerator(
 				await DataConnection.ExecuteDataReaderAsync(GetCommandBehavior(), cancellationToken).ConfigureAwait(Configuration.ContinueOnCapturedContext),
@@ -245,12 +236,7 @@ namespace LinqToDB.Data
 		{
 			await DataConnection.EnsureConnectionAsync(cancellationToken).ConfigureAwait(Configuration.ContinueOnCapturedContext);
 
-			var hasParameters = Parameters?.Length > 0;
-
-			DataConnection.InitCommand(CommandType, CommandText, Parameters, null, hasParameters);
-
-			if (hasParameters)
-				SetParameters(DataConnection, Parameters!);
+			InitCommand();
 
 			using (DataConnection.DataProvider.ExecuteScope(DataConnection))
 #if !NETFRAMEWORK
@@ -295,12 +281,7 @@ namespace LinqToDB.Data
 		/// <returns>Returns collection of query result records.</returns>
 		public IEnumerable<T> Query<T>()
 		{
-			var hasParameters = Parameters?.Length > 0;
-
-			DataConnection.InitCommand(CommandType, CommandText, Parameters, null, hasParameters);
-
-			if (hasParameters)
-				SetParameters(DataConnection, Parameters!);
+			InitCommand();
 
 			return ReadEnumerator<T>(
 				DataConnection.ExecuteDataReader(GetCommandBehavior()),
@@ -315,12 +296,7 @@ namespace LinqToDB.Data
 		/// <returns>Returns collection of query result records.</returns>
 		public async Task<IEnumerable<T>> QueryAsync<T>(CancellationToken cancellationToken = default)
 		{
-			var hasParameters = Parameters?.Length > 0;
-
-			DataConnection.InitCommand(CommandType, CommandText, Parameters, null, hasParameters);
-
-			if (hasParameters)
-				SetParameters(DataConnection, Parameters!);
+			InitCommand();
 
 			return ReadEnumerator<T>(
 				await DataConnection.ExecuteDataReaderAsync(GetCommandBehavior(), cancellationToken).ConfigureAwait(Configuration.ContinueOnCapturedContext),
@@ -414,12 +390,7 @@ namespace LinqToDB.Data
 		{
 			await DataConnection.EnsureConnectionAsync(cancellationToken).ConfigureAwait(Configuration.ContinueOnCapturedContext);
 
-			var hasParameters = Parameters?.Length > 0;
-
-			DataConnection.InitCommand(CommandType, CommandText, Parameters, null, hasParameters);
-
-			if (hasParameters)
-				SetParameters(DataConnection, Parameters!);
+			InitCommand();
 
 			using (DataConnection.DataProvider.ExecuteScope(DataConnection))
 #if !NETFRAMEWORK
@@ -539,12 +510,7 @@ namespace LinqToDB.Data
 		public T QueryMultiple<T>()
 			where T : class
 		{
-			var hasParameters = Parameters?.Length > 0;
-
-			DataConnection.InitCommand(CommandType, CommandText, Parameters, null, hasParameters);
-
-			if (hasParameters)
-				SetParameters(DataConnection, Parameters!);
+			var hasParameters = InitCommand();
 
 			T result;
 
@@ -573,13 +539,8 @@ namespace LinqToDB.Data
 		public async Task<T> QueryMultipleAsync<T>(CancellationToken cancellationToken = default)
 			where T : class
 		{
-			var hasParameters = Parameters?.Length > 0;
-
 			await DataConnection.EnsureConnectionAsync(cancellationToken).ConfigureAwait(Configuration.ContinueOnCapturedContext);
-			DataConnection.InitCommand(CommandType, CommandText, Parameters, null, hasParameters);
-
-			if (hasParameters)
-				SetParameters(DataConnection, Parameters!);
+			var hasParameters = InitCommand();
 
 			T result;
 
@@ -863,12 +824,7 @@ namespace LinqToDB.Data
 		/// <returns>Number of records, affected by command execution.</returns>
 		public int Execute()
 		{
-			var hasParameters = Parameters?.Length > 0;
-
-			DataConnection.InitCommand(CommandType, CommandText, Parameters, null, hasParameters);
-
-			if (hasParameters)
-				SetParameters(DataConnection, Parameters!);
+			var hasParameters = InitCommand();
 
 			var commandResult = DataConnection.ExecuteNonQuery();
 
@@ -903,12 +859,7 @@ namespace LinqToDB.Data
 		{
 			await DataConnection.EnsureConnectionAsync(cancellationToken).ConfigureAwait(Configuration.ContinueOnCapturedContext);
 
-			var hasParameters = Parameters?.Length > 0;
-
-			DataConnection.InitCommand(CommandType, CommandText, Parameters, null, hasParameters);
-
-			if (hasParameters)
-				SetParameters(DataConnection, Parameters!);
+			var hasParameters = InitCommand();
 
 			var commandResult = await DataConnection.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(Configuration.ContinueOnCapturedContext);
 
@@ -941,12 +892,7 @@ namespace LinqToDB.Data
 		/// <returns>Resulting value.</returns>
 		public T Execute<T>()
 		{
-			var hasParameters = Parameters?.Length > 0;
-
-			DataConnection.InitCommand(CommandType, CommandText, Parameters, null, hasParameters);
-
-			if (hasParameters)
-				SetParameters(DataConnection, Parameters!);
+			var hasParameters = InitCommand();
 
 			T result = default!;
 
@@ -1011,12 +957,7 @@ namespace LinqToDB.Data
 		{
 			await DataConnection.EnsureConnectionAsync(cancellationToken).ConfigureAwait(Configuration.ContinueOnCapturedContext);
 
-			var hasParameters = Parameters?.Length > 0;
-
-			DataConnection.InitCommand(CommandType, CommandText, Parameters, null, hasParameters);
-
-			if (hasParameters)
-				SetParameters(DataConnection, Parameters!);
+			var hasParameters = InitCommand();
 
 			T result = default!;
 
@@ -1077,12 +1018,7 @@ namespace LinqToDB.Data
 		/// <returns>Data reader object.</returns>
 		public DataReader ExecuteReader()
 		{
-			var hasParameters = Parameters?.Length > 0;
-
-			DataConnection.InitCommand(CommandType, CommandText, Parameters, null, hasParameters);
-
-			if (hasParameters)
-				SetParameters(DataConnection, Parameters!);
+			var hasParameters = InitCommand();
 
 			return new DataReader(this, DataConnection.ExecuteDataReader(GetCommandBehavior()))
 			{
@@ -1154,6 +1090,17 @@ namespace LinqToDB.Data
 		{
 			await DataConnection.EnsureConnectionAsync(cancellationToken).ConfigureAwait(Configuration.ContinueOnCapturedContext);
 
+			var hasParameters = InitCommand();
+
+			return new DataReaderAsync(this, await DataConnection.ExecuteDataReaderAsync(GetCommandBehavior(), cancellationToken).ConfigureAwait(Configuration.ContinueOnCapturedContext))
+			{
+				OnDispose = hasParameters ? () => RebindParameters(DataConnection, Parameters!) : (Action?)null
+			};
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private bool InitCommand()
+		{
 			var hasParameters = Parameters?.Length > 0;
 
 			DataConnection.InitCommand(CommandType, CommandText, Parameters, null, hasParameters);
@@ -1161,10 +1108,9 @@ namespace LinqToDB.Data
 			if (hasParameters)
 				SetParameters(DataConnection, Parameters!);
 
-			return new DataReaderAsync(this, await DataConnection.ExecuteDataReaderAsync(GetCommandBehavior(), cancellationToken).ConfigureAwait(Configuration.ContinueOnCapturedContext))
-			{
-				OnDispose = hasParameters ? () => RebindParameters(DataConnection, Parameters!) : (Action?)null
-			};
+			DataConnection.CommitCommandInit();
+
+			return hasParameters;
 		}
 
 		internal async Task ExecuteQueryAsync<T>(DbDataReader rd, string sql, Action<T> action, CancellationToken cancellationToken)
@@ -1240,8 +1186,6 @@ namespace LinqToDB.Data
 				dataConnection.DataProvider.SetParameter(dataConnection, p, parameter.Name!, dbDataType, value);
 				dataConnection.CurrentCommand!.Parameters.Add(p);
 			}
-
-			dataConnection.SaveLastParameters(dataConnection.CurrentCommand!);
 		}
 
 		static object ConvertParameterValue<TFrom>(TFrom value, MappingSchema mappingSchema)
