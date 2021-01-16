@@ -36,7 +36,6 @@ namespace OracleDataContext
 		public ITable<LinqDataType>            LinqDataTypes            { get { return this.GetTable<LinqDataType>(); } }
 		public ITable<LINQDATATYPESBC>         Linqdatatypesbcs         { get { return this.GetTable<LINQDATATYPESBC>(); } }
 		public ITable<LongRawTable>            LongRawTables            { get { return this.GetTable<LongRawTable>(); } }
-		public ITable<OracleBulkCopyTable>     OracleBulkCopyTables     { get { return this.GetTable<OracleBulkCopyTable>(); } }
 		public ITable<Parent>                  Parents                  { get { return this.GetTable<Parent>(); } }
 		public ITable<Patient>                 Patients                 { get { return this.GetTable<Patient>(); } }
 		public ITable<Person>                  People                   { get { return this.GetTable<Person>(); } }
@@ -262,12 +261,6 @@ namespace OracleDataContext
 		[Column("longRawDataType", DbType="LONG RAW", DataType=LinqToDB.DataType.LongRaw, Length=0),     Nullable         ] public byte[]? LongRawDataType { get; set; } // LONG RAW
 	}
 
-	[Table(Schema="MANAGED", Name="OracleBulkCopyTable")]
-	public partial class OracleBulkCopyTable
-	{
-		[Column(DbType="NUMBER", DataType=LinqToDB.DataType.Decimal, Length=22, Scale=0), NotNull] public decimal ID { get; set; } // NUMBER
-	}
-
 	[Table(Schema="MANAGED", Name="Parent")]
 	public partial class Parent
 	{
@@ -459,7 +452,7 @@ namespace OracleDataContext
 		#region Associations
 
 		/// <summary>
-		/// SYS_C00799365_BackReference
+		/// SYS_C00804272_BackReference
 		/// </summary>
 		[Association(ThisKey="UserId", OtherKey="UserId", CanBeNull=true, Relationship=LinqToDB.Mapping.Relationship.OneToMany, IsBackReference=true)]
 		public IEnumerable<TTestUserContract> Syscs { get; set; } = null!;
@@ -478,9 +471,9 @@ namespace OracleDataContext
 		#region Associations
 
 		/// <summary>
-		/// SYS_C00799365
+		/// SYS_C00804272
 		/// </summary>
-		[Association(ThisKey="UserId", OtherKey="UserId", CanBeNull=false, Relationship=LinqToDB.Mapping.Relationship.ManyToOne, KeyName="SYS_C00799365", BackReferenceName="Syscs")]
+		[Association(ThisKey="UserId", OtherKey="UserId", CanBeNull=false, Relationship=LinqToDB.Mapping.Relationship.ManyToOne, KeyName="SYS_C00804272", BackReferenceName="Syscs")]
 		public TTestUser User { get; set; } = null!;
 
 		#endregion
@@ -524,10 +517,10 @@ namespace OracleDataContext
 				new DataParameter("POUTPUTSTR", null,      LinqToDB.DataType.NVarChar) { Direction = ParameterDirection.Output },
 				new DataParameter("PINPUTOUTPUTSTR", PINPUTOUTPUTSTR, LinqToDB.DataType.NVarChar) { Direction = ParameterDirection.InputOutput });
 
-			POUTPUTID       = Converter.ChangeTypeTo<decimal?>(((IDbDataParameter)dataConnection.Command.Parameters["POUTPUTID"]).      Value);
-			PINPUTOUTPUTID  = Converter.ChangeTypeTo<decimal?>(((IDbDataParameter)dataConnection.Command.Parameters["PINPUTOUTPUTID"]). Value);
-			POUTPUTSTR      = Converter.ChangeTypeTo<string?> (((IDbDataParameter)dataConnection.Command.Parameters["POUTPUTSTR"]).     Value);
-			PINPUTOUTPUTSTR = Converter.ChangeTypeTo<string?> (((IDbDataParameter)dataConnection.Command.Parameters["PINPUTOUTPUTSTR"]).Value);
+			POUTPUTID       = Converter.ChangeTypeTo<decimal?>(((IDbDataParameter)dataConnection.LastParameters!["POUTPUTID"]).      Value);
+			PINPUTOUTPUTID  = Converter.ChangeTypeTo<decimal?>(((IDbDataParameter)dataConnection.LastParameters!["PINPUTOUTPUTID"]). Value);
+			POUTPUTSTR      = Converter.ChangeTypeTo<string?> (((IDbDataParameter)dataConnection.LastParameters!["POUTPUTSTR"]).     Value);
+			PINPUTOUTPUTSTR = Converter.ChangeTypeTo<string?> (((IDbDataParameter)dataConnection.LastParameters!["PINPUTOUTPUTSTR"]).Value);
 
 			return ret;
 		}
@@ -543,8 +536,8 @@ namespace OracleDataContext
 				new DataParameter("POUTPUTSTR", null,      LinqToDB.DataType.NVarChar) { Direction = ParameterDirection.Output },
 				new DataParameter("PINPUTOUTPUTSTR", PINPUTOUTPUTSTR, LinqToDB.DataType.NVarChar) { Direction = ParameterDirection.InputOutput });
 
-			POUTPUTSTR      = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.Command.Parameters["POUTPUTSTR"]).     Value);
-			PINPUTOUTPUTSTR = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.Command.Parameters["PINPUTOUTPUTSTR"]).Value);
+			POUTPUTSTR      = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["POUTPUTSTR"]).     Value);
+			PINPUTOUTPUTSTR = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["PINPUTOUTPUTSTR"]).Value);
 
 			return ret;
 		}

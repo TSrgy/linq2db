@@ -96,12 +96,6 @@ namespace LinqToDB.DataProvider.DB2
 			return _sqlOptimizer;
 		}
 
-		public override void InitCommand(DataConnection dataConnection, CommandType commandType, string commandText, DataParameter[]? parameters, bool withParameters)
-		{
-			dataConnection.DisposeCommand();
-			base.InitCommand(dataConnection, commandType, commandText, parameters, withParameters);
-		}
-
 		public override void SetParameter(DataConnection dataConnection, IDbDataParameter parameter, string name, DbDataType dataType, object? value)
 		{
 			if (value is sbyte sb)

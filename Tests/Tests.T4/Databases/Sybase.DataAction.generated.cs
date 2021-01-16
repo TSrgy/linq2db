@@ -347,7 +347,7 @@ namespace SybaseDataActionDataContext
 			var ret = dataConnection.ExecuteProc("[dbo].[AddIssue792Record]",
 				new DataParameter("RETURN_VALUE", null, LinqToDB.DataType.Int32) { Direction = ParameterDirection.ReturnValue, Size = 10 });
 
-			RETURN_VALUE = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.Command.Parameters["RETURN_VALUE"]).Value);
+			RETURN_VALUE = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.LastParameters!["RETURN_VALUE"]).Value);
 
 			return ret;
 		}
@@ -361,7 +361,7 @@ namespace SybaseDataActionDataContext
 			var ret = dataConnection.QueryProc<PersonSelectAllResult>("[dbo].[Person_SelectAll]",
 				new DataParameter("RETURN_VALUE", null, LinqToDB.DataType.Int32) { Direction = ParameterDirection.ReturnValue, Size = 10 }).ToList();
 
-			RETURN_VALUE = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.Command.Parameters["RETURN_VALUE"]).Value);
+			RETURN_VALUE = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.LastParameters!["RETURN_VALUE"]).Value);
 
 			return ret;
 		}

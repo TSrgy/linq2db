@@ -791,7 +791,7 @@ namespace Tests.DataProvider
 				new DataParameter("GENDER",   GENDER,   DataType.NChar),
 				new DataParameter("PERSONID", null, DataType.Int32) { Direction = ParameterDirection.Output, Size = 4 }).ToList();
 
-			PERSONID = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.Command.Parameters["PERSONID"]).Value);
+			PERSONID = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.LastParameters!["PERSONID"]).Value);
 
 			return ret;
 		}

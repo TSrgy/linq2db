@@ -1679,7 +1679,7 @@ namespace DataContextMS
 				new DataParameter("@input",  @input,  LinqToDB.DataType.Int32),
 				new DataParameter("@output", @output, LinqToDB.DataType.Int32) { Direction = ParameterDirection.InputOutput });
 
-			@output = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.Command.Parameters["@output"]).Value);
+			@output = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.LastParameters!["@output"]).Value);
 
 			return ret;
 		}
@@ -1707,7 +1707,7 @@ namespace DataContextMS
 				new DataParameter("@input",  @input,  LinqToDB.DataType.Int32),
 				new DataParameter("@output", @output, LinqToDB.DataType.Int32) { Direction = ParameterDirection.InputOutput }).ToList();
 
-			@output = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.Command.Parameters["@output"]).Value);
+			@output = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.LastParameters!["@output"]).Value);
 
 			return ret;
 		}
@@ -1726,7 +1726,7 @@ namespace DataContextMS
 			var ret = dataConnection.ExecuteProc("[Issue1897]",
 				new DataParameter("@return", null, LinqToDB.DataType.Int32) { Direction = ParameterDirection.ReturnValue });
 
-			@return = Converter.ChangeTypeTo<int>(((IDbDataParameter)dataConnection.Command.Parameters["@return"]).Value);
+			@return = Converter.ChangeTypeTo<int>(((IDbDataParameter)dataConnection.LastParameters!["@return"]).Value);
 
 			return ret;
 		}
@@ -1742,8 +1742,8 @@ namespace DataContextMS
 				new DataParameter("@outputStr",      @outputStr,      LinqToDB.DataType.VarChar) { Direction = ParameterDirection.InputOutput, Size = 50 },
 				new DataParameter("@inputOutputStr", @inputOutputStr, LinqToDB.DataType.VarChar) { Direction = ParameterDirection.InputOutput, Size = 50 });
 
-			@outputStr      = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.Command.Parameters["@outputStr"]).     Value);
-			@inputOutputStr = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.Command.Parameters["@inputOutputStr"]).Value);
+			@outputStr      = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["@outputStr"]).     Value);
+			@inputOutputStr = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["@inputOutputStr"]).Value);
 
 			return ret;
 		}
@@ -1762,10 +1762,10 @@ namespace DataContextMS
 				new DataParameter("@outputStr",      @outputStr,      LinqToDB.DataType.VarChar) { Direction = ParameterDirection.InputOutput, Size = 50 },
 				new DataParameter("@inputOutputStr", @inputOutputStr, LinqToDB.DataType.VarChar) { Direction = ParameterDirection.InputOutput, Size = 50 });
 
-			@outputID       = Converter.ChangeTypeTo<int?>   (((IDbDataParameter)dataConnection.Command.Parameters["@outputID"]).      Value);
-			@inputOutputID  = Converter.ChangeTypeTo<int?>   (((IDbDataParameter)dataConnection.Command.Parameters["@inputOutputID"]). Value);
-			@outputStr      = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.Command.Parameters["@outputStr"]).     Value);
-			@inputOutputStr = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.Command.Parameters["@inputOutputStr"]).Value);
+			@outputID       = Converter.ChangeTypeTo<int?>   (((IDbDataParameter)dataConnection.LastParameters!["@outputID"]).      Value);
+			@inputOutputID  = Converter.ChangeTypeTo<int?>   (((IDbDataParameter)dataConnection.LastParameters!["@inputOutputID"]). Value);
+			@outputStr      = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["@outputStr"]).     Value);
+			@inputOutputStr = Converter.ChangeTypeTo<string?>(((IDbDataParameter)dataConnection.LastParameters!["@inputOutputStr"]).Value);
 
 			return ret;
 		}
@@ -1851,7 +1851,7 @@ namespace DataContextMS
 				new DataParameter("@Gender",   @Gender,   LinqToDB.DataType.Char),
 				new DataParameter("@PersonID", @PersonID, LinqToDB.DataType.Int32) { Direction = ParameterDirection.InputOutput });
 
-			@PersonID = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.Command.Parameters["@PersonID"]).Value);
+			@PersonID = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.LastParameters!["@PersonID"]).Value);
 
 			return ret;
 		}
@@ -1905,8 +1905,8 @@ namespace DataContextMS
 
 		public partial class PersonSelectByKeyLowercaseResult
 		{
-			public int    personid  { get; set; }
-			public string firstname { get; set; } = null!;
+			public int    PersonID  { get; set; }
+			public string FirstName { get; set; } = null!;
 		}
 
 		#endregion
@@ -1975,9 +1975,9 @@ namespace DataContextMS
 				new DataParameter("@output2", @output2, LinqToDB.DataType.Int32) { Direction = ParameterDirection.InputOutput },
 				new DataParameter("@output3", @output3, LinqToDB.DataType.Int32) { Direction = ParameterDirection.InputOutput }).ToList();
 
-			@output1 = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.Command.Parameters["@output1"]).Value);
-			@output2 = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.Command.Parameters["@output2"]).Value);
-			@output3 = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.Command.Parameters["@output3"]).Value);
+			@output1 = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.LastParameters!["@output1"]).Value);
+			@output2 = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.LastParameters!["@output2"]).Value);
+			@output3 = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.LastParameters!["@output3"]).Value);
 
 			return ret;
 		}
@@ -2002,8 +2002,8 @@ namespace DataContextMS
 				new DataParameter("@output1", @output1, LinqToDB.DataType.Int32) { Direction = ParameterDirection.InputOutput },
 				new DataParameter("@output2", @output2, LinqToDB.DataType.Int32) { Direction = ParameterDirection.InputOutput }).ToList();
 
-			@output1 = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.Command.Parameters["@output1"]).Value);
-			@output2 = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.Command.Parameters["@output2"]).Value);
+			@output1 = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.LastParameters!["@output1"]).Value);
+			@output2 = Converter.ChangeTypeTo<int?>(((IDbDataParameter)dataConnection.LastParameters!["@output2"]).Value);
 
 			return ret;
 		}

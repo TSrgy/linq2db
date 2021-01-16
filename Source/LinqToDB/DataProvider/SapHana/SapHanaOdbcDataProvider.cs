@@ -48,7 +48,7 @@ namespace LinqToDB.DataProvider.SapHana
 			return new SapHanaOdbcSchemaProvider();
 		}
 
-		public override void InitCommand(DataConnection dataConnection, CommandType commandType, string commandText, DataParameter[]? parameters, bool withParameters)
+		public override IDbCommand InitCommand(DataConnection dataConnection, IDbCommand command, CommandType commandType, string commandText, DataParameter[]? parameters, bool withParameters)
 		{
 			if (commandType == CommandType.StoredProcedure)
 			{
@@ -56,7 +56,7 @@ namespace LinqToDB.DataProvider.SapHana
 				commandType = CommandType.Text;
 			}
 
-			base.InitCommand(dataConnection, commandType, commandText, parameters, withParameters);
+			return base.InitCommand(dataConnection, command, commandType, commandText, parameters, withParameters);
 		}
 
 		public override TableOptions SupportedTableOptions =>
@@ -110,11 +110,7 @@ namespace LinqToDB.DataProvider.SapHana
 			base.SetParameter(dataConnection, parameter, name, dataType, value);
 		}
 
-		public override IDisposable ExecuteScope(DataConnection dataConnection)
-		{
-			// shame!
-			return new InvariantCultureRegion();
-		}
+		public override IDisposable ExecuteScope(DataConnection dataConnection) => new InvariantCultureRegion(base.ExecuteScope(dataConnection));
 
 		protected override void SetParameterType(DataConnection dataConnection, IDbDataParameter parameter, DbDataType dataType)
 		{
