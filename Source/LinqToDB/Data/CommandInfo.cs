@@ -1184,6 +1184,9 @@ namespace LinqToDB.Data
 				if (parameter.Scale     != null) p.Scale     = (byte)parameter.Scale    .Value;
 
 				dataConnection.DataProvider.SetParameter(dataConnection, p, parameter.Name!, dbDataType, value);
+				// some providers (e.g. managed sybase provider) could change parameter name
+				// which breaks parameters rebind logic
+				parameter.Name = p.ParameterName;
 				dataConnection.CurrentCommand!.Parameters.Add(p);
 			}
 		}

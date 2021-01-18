@@ -158,8 +158,7 @@ namespace LinqToDB.DataProvider.DB2
 					}
 			}
 
-			// TODO: why we add @ explicitly for DB2, SQLite and Sybase providers???
-			base.SetParameter(dataConnection, parameter, "@" + name, dataType, value);
+			base.SetParameter(dataConnection, parameter, name, dataType, value);
 		}
 
 		protected override void SetParameterType(DataConnection dataConnection, IDbDataParameter parameter, DbDataType dataType)
