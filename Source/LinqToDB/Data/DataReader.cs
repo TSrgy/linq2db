@@ -10,42 +10,41 @@ namespace LinqToDB.Data
 {
 	public class DataReader : IDisposable
 	{
-		private DataReaderWrapper? _wrapper;
-
-		public   DbDataReader?    Reader      => _wrapper?.DataReader;
-		public   CommandInfo?     CommandInfo { get; }
-		internal int              ReadNumber  { get; set; }
-		private  DateTime         StartedOn   { get; }      = DateTime.UtcNow;
-		private  Stopwatch        Stopwatch   { get; }      = Stopwatch.StartNew();
-		internal Action?          OnDispose   { get; set; }
+		internal DataReaderWrapper?  ReaderWrapper { get; private set;  }
+		public   DbDataReader?       Reader        => ReaderWrapper?.DataReader;
+		public   CommandInfo?        CommandInfo   { get; }
+		internal int                 ReadNumber    { get; set; }
+		private  DateTime            StartedOn     { get; }      = DateTime.UtcNow;
+		private  Stopwatch           Stopwatch     { get; }      = Stopwatch.StartNew();
+		internal Action<DataReader>? OnDispose     { get; set; }
 
 		public DataReader(CommandInfo commandInfo, DataReaderWrapper dataReader)
 		{
-			CommandInfo = commandInfo;
-			_wrapper    = dataReader;
+			CommandInfo   = commandInfo;
+			ReaderWrapper = dataReader;
 		}
 
 		public void Dispose()
 		{
-			if (_wrapper != null)
+			OnDispose?.Invoke(this);
+
+			if (ReaderWrapper != null)
 			{
 				if (CommandInfo?.DataConnection.TraceSwitchConnection.TraceInfo == true)
 				{
 					CommandInfo.DataConnection.OnTraceConnection(new TraceInfo(CommandInfo.DataConnection, TraceInfoStep.Completed)
 					{
 						TraceLevel      = TraceLevel.Info,
-						Command         = _wrapper.Command,
+						Command         = ReaderWrapper.Command,
 						StartTime       = StartedOn,
 						ExecutionTime   = Stopwatch.Elapsed,
 						RecordsAffected = ReadNumber,
 					});
 				}
 
-				_wrapper.Dispose();
-				_wrapper = null;
+				ReaderWrapper.Dispose();
+				ReaderWrapper = null;
 			}
-
-			OnDispose?.Invoke();
 		}
 
 		#region Query with object reader

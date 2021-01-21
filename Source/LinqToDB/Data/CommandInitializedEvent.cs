@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
 
 namespace LinqToDB.Data
 {
@@ -14,7 +15,7 @@ namespace LinqToDB.Data
 	/// </summary>
 	public class OnCommandInitializedEventArgs
 	{
-		internal OnCommandInitializedEventArgs(DataConnection dataConnection, IDbCommand command)
+		internal OnCommandInitializedEventArgs(DataConnection dataConnection, DbCommand command)
 		{
 			DataConnection = dataConnection;
 			_command       = command;
@@ -25,12 +26,12 @@ namespace LinqToDB.Data
 		/// </summary>
 		public DataConnection DataConnection { get; }
 
-		private IDbCommand _command;
+		private DbCommand _command;
 
 		/// <summary>
 		/// Get or set command.
 		/// </summary>
-		public IDbCommand Command
+		public DbCommand Command
 		{
 			get => _command;
 			set 

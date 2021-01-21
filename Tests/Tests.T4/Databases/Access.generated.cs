@@ -396,8 +396,12 @@ namespace AccessDataContext
 
 		public static int AddIssue792Record(this TestDataDB dataConnection, int? id)
 		{
-			return dataConnection.ExecuteProc("[AddIssue792Record]",
-				new DataParameter("id", id, LinqToDB.DataType.Int32));
+			var parameters = new []
+			{
+				new DataParameter("id", id, LinqToDB.DataType.Int32)
+			};
+
+			return dataConnection.ExecuteProc("[AddIssue792Record]", parameters);
 		}
 
 		#endregion
@@ -406,9 +410,19 @@ namespace AccessDataContext
 
 		public static IEnumerable<PatientSelectAll> PatientSelectByName(this TestDataDB dataConnection, string? @firstName, string? @lastName)
 		{
-			return dataConnection.QueryProc<PatientSelectAll>("[Patient_SelectByName]",
-				new DataParameter("@firstName", @firstName, LinqToDB.DataType.NText),
-				new DataParameter("@lastName",  @lastName,  LinqToDB.DataType.NText));
+			var parameters = new []
+			{
+				new DataParameter("@firstName", @firstName, LinqToDB.DataType.NText)
+				{
+					Size = 50
+				},
+				new DataParameter("@lastName",  @lastName,  LinqToDB.DataType.NText)
+				{
+					Size = 50
+				}
+			};
+
+			return dataConnection.QueryProc<PatientSelectAll>("[Patient_SelectByName]", parameters);
 		}
 
 		#endregion
@@ -417,8 +431,12 @@ namespace AccessDataContext
 
 		public static int PersonDelete(this TestDataDB dataConnection, int? @PersonID)
 		{
-			return dataConnection.ExecuteProc("[Person_Delete]",
-				new DataParameter("@PersonID", @PersonID, LinqToDB.DataType.Int32));
+			var parameters = new []
+			{
+				new DataParameter("@PersonID", @PersonID, LinqToDB.DataType.Int32)
+			};
+
+			return dataConnection.ExecuteProc("[Person_Delete]", parameters);
 		}
 
 		#endregion
@@ -427,11 +445,27 @@ namespace AccessDataContext
 
 		public static int PersonInsert(this TestDataDB dataConnection, string? @FirstName, string? @MiddleName, string? @LastName, char? @Gender)
 		{
-			return dataConnection.ExecuteProc("[Person_Insert]",
-				new DataParameter("@FirstName",  @FirstName,  LinqToDB.DataType.NText),
-				new DataParameter("@MiddleName", @MiddleName, LinqToDB.DataType.NText),
-				new DataParameter("@LastName",   @LastName,   LinqToDB.DataType.NText),
-				new DataParameter("@Gender",     @Gender,     LinqToDB.DataType.NText));
+			var parameters = new []
+			{
+				new DataParameter("@FirstName",  @FirstName,  LinqToDB.DataType.NText)
+				{
+					Size = 50
+				},
+				new DataParameter("@MiddleName", @MiddleName, LinqToDB.DataType.NText)
+				{
+					Size = 50
+				},
+				new DataParameter("@LastName",   @LastName,   LinqToDB.DataType.NText)
+				{
+					Size = 50
+				},
+				new DataParameter("@Gender",     @Gender,     LinqToDB.DataType.NText)
+				{
+					Size = 1
+				}
+			};
+
+			return dataConnection.ExecuteProc("[Person_Insert]", parameters);
 		}
 
 		#endregion
@@ -440,8 +474,12 @@ namespace AccessDataContext
 
 		public static IEnumerable<Person> PersonSelectByKey(this TestDataDB dataConnection, int? @id)
 		{
-			return dataConnection.QueryProc<Person>("[Person_SelectByKey]",
-				new DataParameter("@id", @id, LinqToDB.DataType.Int32));
+			var parameters = new []
+			{
+				new DataParameter("@id", @id, LinqToDB.DataType.Int32)
+			};
+
+			return dataConnection.QueryProc<Person>("[Person_SelectByKey]", parameters);
 		}
 
 		#endregion
@@ -450,9 +488,19 @@ namespace AccessDataContext
 
 		public static IEnumerable<Person> PersonSelectByName(this TestDataDB dataConnection, string? @firstName, string? @lastName)
 		{
-			return dataConnection.QueryProc<Person>("[Person_SelectByName]",
-				new DataParameter("@firstName", @firstName, LinqToDB.DataType.NText),
-				new DataParameter("@lastName",  @lastName,  LinqToDB.DataType.NText));
+			var parameters = new []
+			{
+				new DataParameter("@firstName", @firstName, LinqToDB.DataType.NText)
+				{
+					Size = 50
+				},
+				new DataParameter("@lastName",  @lastName,  LinqToDB.DataType.NText)
+				{
+					Size = 50
+				}
+			};
+
+			return dataConnection.QueryProc<Person>("[Person_SelectByName]", parameters);
 		}
 
 		#endregion
@@ -461,9 +509,19 @@ namespace AccessDataContext
 
 		public static IEnumerable<Person> PersonSelectListByName(this TestDataDB dataConnection, string? @firstName, string? @lastName)
 		{
-			return dataConnection.QueryProc<Person>("[Person_SelectListByName]",
-				new DataParameter("@firstName", @firstName, LinqToDB.DataType.NText),
-				new DataParameter("@lastName",  @lastName,  LinqToDB.DataType.NText));
+			var parameters = new []
+			{
+				new DataParameter("@firstName", @firstName, LinqToDB.DataType.NText)
+				{
+					Size = 50
+				},
+				new DataParameter("@lastName",  @lastName,  LinqToDB.DataType.NText)
+				{
+					Size = 50
+				}
+			};
+
+			return dataConnection.QueryProc<Person>("[Person_SelectListByName]", parameters);
 		}
 
 		#endregion
@@ -472,12 +530,28 @@ namespace AccessDataContext
 
 		public static int PersonUpdate(this TestDataDB dataConnection, int? @id, string? @FirstName, string? @MiddleName, string? @LastName, char? @Gender)
 		{
-			return dataConnection.ExecuteProc("[Person_Update]",
+			var parameters = new []
+			{
 				new DataParameter("@id",         @id,         LinqToDB.DataType.Int32),
-				new DataParameter("@FirstName",  @FirstName,  LinqToDB.DataType.NText),
-				new DataParameter("@MiddleName", @MiddleName, LinqToDB.DataType.NText),
-				new DataParameter("@LastName",   @LastName,   LinqToDB.DataType.NText),
-				new DataParameter("@Gender",     @Gender,     LinqToDB.DataType.NText));
+				new DataParameter("@FirstName",  @FirstName,  LinqToDB.DataType.NText)
+				{
+					Size = 50
+				},
+				new DataParameter("@MiddleName", @MiddleName, LinqToDB.DataType.NText)
+				{
+					Size = 50
+				},
+				new DataParameter("@LastName",   @LastName,   LinqToDB.DataType.NText)
+				{
+					Size = 50
+				},
+				new DataParameter("@Gender",     @Gender,     LinqToDB.DataType.NText)
+				{
+					Size = 1
+				}
+			};
+
+			return dataConnection.ExecuteProc("[Person_Update]", parameters);
 		}
 
 		#endregion

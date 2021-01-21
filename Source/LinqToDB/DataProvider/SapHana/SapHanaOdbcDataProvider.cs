@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace LinqToDB.DataProvider.SapHana
 {
+	using System.Data.Common;
 	using Common;
 	using Data;
 	using Extensions;
@@ -48,7 +49,7 @@ namespace LinqToDB.DataProvider.SapHana
 			return new SapHanaOdbcSchemaProvider();
 		}
 
-		public override IDbCommand InitCommand(DataConnection dataConnection, IDbCommand command, CommandType commandType, string commandText, DataParameter[]? parameters, bool withParameters)
+		public override DbCommand InitCommand(DataConnection dataConnection, DbCommand command, CommandType commandType, string commandText, DataParameter[]? parameters, bool withParameters)
 		{
 			if (commandType == CommandType.StoredProcedure)
 			{

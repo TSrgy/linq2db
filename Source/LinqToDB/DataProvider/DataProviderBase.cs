@@ -95,7 +95,7 @@ namespace LinqToDB.DataProvider
 		public    abstract ISqlBuilder   CreateSqlBuilder(MappingSchema mappingSchema);
 		public    abstract ISqlOptimizer GetSqlOptimizer ();
 
-		public virtual IDbCommand InitCommand(DataConnection dataConnection, IDbCommand command, CommandType commandType, string commandText, DataParameter[]? parameters, bool withParameters)
+		public virtual DbCommand InitCommand(DataConnection dataConnection, DbCommand command, CommandType commandType, string commandText, DataParameter[]? parameters, bool withParameters)
 		{
 			command.CommandType = commandType;
 

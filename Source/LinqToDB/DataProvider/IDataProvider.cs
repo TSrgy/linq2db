@@ -7,6 +7,7 @@ using System.Threading;
 
 namespace LinqToDB.DataProvider
 {
+	using System.Data.Common;
 	using Common;
 	using Data;
 	using Mapping;
@@ -34,7 +35,7 @@ namespace LinqToDB.DataProvider
 		/// <param name="parameters">Optional list of parameters to add to initialized command.</param>
 		/// <param name="withParameters">Flag to indicate that command has parameters. Used to configure parameters support when method called without parameters and parameters added later to command.</param>
 		/// <returns>Initialized command instance.</returns>
-		IDbCommand         InitCommand           (DataConnection dataConnection, IDbCommand command, CommandType commandType, string commandText, DataParameter[]? parameters, bool withParameters);
+		DbCommand          InitCommand           (DataConnection dataConnection, DbCommand command, CommandType commandType, string commandText, DataParameter[]? parameters, bool withParameters);
 		void               DisposeCommand        (IDbCommand command);
 		object?            GetConnectionInfo     (DataConnection dataConnection, string parameterName);
 		Expression         GetReaderExpression   (IDataReader reader, int idx, Expression readerExpression, Type toType);

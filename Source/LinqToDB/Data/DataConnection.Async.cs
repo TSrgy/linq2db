@@ -36,7 +36,7 @@ namespace LinqToDB.Data
 			// If the active command exists.
 			//
 			if (_command != null)
-				_command.Transaction = Transaction;
+				_command.Transaction = (DbTransaction?)Transaction;
 
 			return new DataConnectionTransaction(this);
 		}
@@ -64,7 +64,7 @@ namespace LinqToDB.Data
 			// If the active command exists.
 			//
 			if (_command != null)
-				_command.Transaction = Transaction;
+				_command.Transaction = (DbTransaction?)Transaction;
 
 			return new DataConnectionTransaction(this);
 		}
@@ -358,7 +358,7 @@ namespace LinqToDB.Data
 			CancellationToken cancellationToken)
 		{
 			var dr      = await ((DbCommand)CurrentCommand!).ExecuteReaderExtAsync(commandBehavior, cancellationToken).ConfigureAwait(Common.Configuration.ContinueOnCapturedContext);
-			var wrapper = new DataReaderWrapper(this, dr, CurrentCommand!);
+			var wrapper = new DataReaderWrapper(this, dr, (DbCommand?)CurrentCommand!);
 			_command    = null;
 
 			return wrapper;

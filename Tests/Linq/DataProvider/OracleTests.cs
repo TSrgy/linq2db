@@ -24,6 +24,7 @@ using Oracle.ManagedDataAccess.Types;
 
 namespace Tests.DataProvider
 {
+	using System.Data.Common;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Threading;
 	using System.Threading.Tasks;
@@ -868,15 +869,21 @@ namespace Tests.DataProvider
 			var date = TestData.Date;
 			using (var db = new DataConnection(context))
 			{
+				DbParameter[] parameters = null!;
+				db.OnCommandInitialized += args =>
+				{
+					parameters = args.Command.Parameters.Cast<DbParameter>().ToArray();
+				};
+
 				var query = from a in db.GetTable<AllTypes>()
 							where a.datetimeDataType == date
 							select a;
 
 				query.FirstOrDefault();
 
-				Assert.That(db.LastParameters.Count, Is.EqualTo(2));
+				Assert.That(parameters.Length, Is.EqualTo(2));
 
-				Assert.True(db.LastParameters.Values.Any(p => p.DbType == DbType.Date));
+				Assert.True(parameters.Any(p => p.DbType == DbType.Date));
 			}
 		}
 
@@ -886,6 +893,12 @@ namespace Tests.DataProvider
 			var date = TestData.Date;
 			using (var db = new DataConnection(context))
 			{
+				DbParameter[] parameters = null!;
+				db.OnCommandInitialized += args =>
+				{
+					parameters = args.Command.Parameters.Cast<DbParameter>().ToArray();
+				};
+
 				var query = from a in db.GetTable<AllTypes>()
 							join b in db.GetTable<AllTypes>() on a.ID equals b.ID
 							where a.datetimeDataType == date
@@ -893,9 +906,9 @@ namespace Tests.DataProvider
 
 				query.FirstOrDefault();
 
-				Assert.That(db.LastParameters.Count, Is.EqualTo(2));
+				Assert.That(parameters.Length, Is.EqualTo(2));
 
-				Assert.True(db.LastParameters.Values.Any(p => p.DbType == DbType.Date));
+				Assert.True(parameters.Any(p => p.DbType == DbType.Date));
 			}
 		}
 

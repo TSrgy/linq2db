@@ -21,7 +21,7 @@ namespace LinqToDB.Data
 			DataReader = dataReader;
 		}
 
-		internal DataReaderWrapper(DataConnection dataConnection, DbDataReader dataReader, IDbCommand? command)
+		internal DataReaderWrapper(DataConnection dataConnection, DbDataReader dataReader, DbCommand? command)
 		{
 			_dataConnection = dataConnection;
 			DataReader      = dataReader;
@@ -29,7 +29,7 @@ namespace LinqToDB.Data
 		}
 
 		public  DbDataReader? DataReader { get; private set; }
-		internal IDbCommand?  Command    { get; }
+		internal DbCommand?   Command    { get; }
 
 		public void Dispose()
 		{

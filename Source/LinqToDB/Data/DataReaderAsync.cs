@@ -13,67 +13,67 @@ namespace LinqToDB.Data
 		, IAsyncDisposable
 #endif
 	{
-		private DataReaderWrapper? _wrapper;
-
-		public   DbDataReader?     Reader            => _wrapper?.DataReader;
-		public   CommandInfo?      CommandInfo       { get; }
-		internal int               ReadNumber        { get; set; }
-		internal CancellationToken CancellationToken { get; set; }
-		private  DateTime          StartedOn         { get; }      = DateTime.UtcNow;
-		private  Stopwatch         Stopwatch         { get; }      = Stopwatch.StartNew();
-		internal Action?           OnDispose         { get; set; }
+		internal DataReaderWrapper?       ReaderWrapper     { get; private set; }
+		public   DbDataReader?            Reader            => ReaderWrapper?.DataReader;
+		public   CommandInfo?             CommandInfo       { get; }
+		internal int                      ReadNumber        { get; set; }
+		internal CancellationToken        CancellationToken { get; set; }
+		private  DateTime                 StartedOn         { get; }      = DateTime.UtcNow;
+		private  Stopwatch                Stopwatch         { get; }      = Stopwatch.StartNew();
+		internal Action<DataReaderAsync>? OnDispose         { get; set; }
 
 		public DataReaderAsync(CommandInfo commandInfo, DataReaderWrapper dataReader)
 		{
-			CommandInfo = commandInfo;
-			_wrapper    = dataReader;
+			CommandInfo   = commandInfo;
+			ReaderWrapper = dataReader;
 		}
 
 		public void Dispose()
 		{
-			if (_wrapper != null)
+			OnDispose?.Invoke(this);
+
+			if (ReaderWrapper != null)
 			{
 				if (CommandInfo?.DataConnection.TraceSwitchConnection.TraceInfo == true)
 				{
 					CommandInfo.DataConnection.OnTraceConnection(new TraceInfo(CommandInfo.DataConnection, TraceInfoStep.Completed)
 					{
 						TraceLevel      = TraceLevel.Info,
-						Command         = _wrapper.Command,
+						Command         = ReaderWrapper.Command,
 						StartTime       = StartedOn,
 						ExecutionTime   = Stopwatch.Elapsed,
 						RecordsAffected = ReadNumber,
 					});
 				}
 
-				_wrapper.Dispose();
-				_wrapper = null;
+				ReaderWrapper.Dispose();
+				ReaderWrapper = null;
 			}
 
-			OnDispose?.Invoke();
 		}
 
 #if NETSTANDARD2_1PLUS
 		public async ValueTask DisposeAsync()
 		{
-			if (_wrapper != null)
+			OnDispose?.Invoke(this);
+
+			if (ReaderWrapper != null)
 			{
 				if (CommandInfo?.DataConnection.TraceSwitchConnection.TraceInfo == true)
 				{
 					CommandInfo.DataConnection.OnTraceConnection(new TraceInfo(CommandInfo.DataConnection, TraceInfoStep.Completed)
 					{
 						TraceLevel      = TraceLevel.Info,
-						Command         = _wrapper.Command,
+						Command         = ReaderWrapper.Command,
 						StartTime       = StartedOn,
 						ExecutionTime   = Stopwatch.Elapsed,
 						RecordsAffected = ReadNumber,
 					});
 				}
 
-				await _wrapper.DisposeAsync().ConfigureAwait(Common.Configuration.ContinueOnCapturedContext);
-				_wrapper = null;
+				await ReaderWrapper.DisposeAsync().ConfigureAwait(Common.Configuration.ContinueOnCapturedContext);
+				ReaderWrapper = null;
 			}
-
-			OnDispose?.Invoke();
 		}
 #elif !NETFRAMEWORK
 		public ValueTask DisposeAsync()

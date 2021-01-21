@@ -1761,11 +1761,17 @@ namespace Tests.Data
 		{
 			using (var db = new TestDataConnection(context))
 			{
+				DbParameter[]? parameters = null!;
+				db.OnCommandInitialized += args =>
+				{
+					parameters = args.Command.Parameters.Cast<DbParameter>().ToArray();
+				};
+
 				var param = "test";
 
 				db.Person.Where(_ => _.LastName == param).ToList();
 
-				Assert.AreEqual(1, db.LastParameters.Count);
+				Assert.AreEqual(1, parameters.Length);
 			}
 		}
 
@@ -1774,11 +1780,17 @@ namespace Tests.Data
 		{
 			using (var db = new TestDataConnection(context))
 			{
+				DbParameter[]? parameters = null!;
+				db.OnCommandInitialized += args =>
+				{
+					parameters = args.Command.Parameters.Cast<DbParameter>().ToArray();
+				};
+
 				var param = "test";
 
 				await db.Person.Where(_ => _.LastName == param).ToListAsync();
 
-				Assert.AreEqual(1, db.LastParameters.Count);
+				Assert.AreEqual(1, parameters.Length);
 			}
 		}
 

@@ -55,7 +55,7 @@ namespace Tests.Linq
 			var semaphore = new Semaphore(0, poolCount);
 			
 			var threads = new Thread[threadCount];
-			var results = new Tuple<TParam, TResult, string, IReadOnlyDictionary<string, DbParameter>?, Exception?>[threadCount];
+			var results = new Tuple<TParam, TResult, string, DbParameter[]?, Exception?>[threadCount];
 
 			for (var i = 0; i < threadCount; i++)
 			{
@@ -70,13 +70,19 @@ namespace Tests.Linq
 						{
 							using (var threadDb = (DataConnection)GetDataContext(context))
 							{
+								DbParameter[]? parameters = null;
+								threadDb.OnCommandInitialized += args =>
+								{
+									parameters = args.Command.Parameters.Cast<DbParameter>().ToArray();
+								};
+
 								var result = queryFunc(threadDb, param);
-								results[n] = Tuple.Create(param, result, threadDb.LastQuery!, (IReadOnlyDictionary<string, DbParameter>?)threadDb.LastParameters, (Exception?)null);
+								results[n] = Tuple.Create(param, result, threadDb.LastQuery!, parameters, (Exception?)null);
 							}
 						}
 						catch (Exception e)
 						{
-							results[n] = Tuple.Create(param, default(TResult), "", (IReadOnlyDictionary<string, DbParameter>?)null, e)!;
+							results[n] = Tuple.Create(param, default(TResult), "", (DbParameter[]?)null, e)!;
 						}
 
 					}

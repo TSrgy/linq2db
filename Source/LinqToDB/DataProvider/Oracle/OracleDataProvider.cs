@@ -114,7 +114,7 @@ namespace LinqToDB.DataProvider.Oracle
 
 		public override SchemaProvider.ISchemaProvider GetSchemaProvider() => new OracleSchemaProvider(this);
 
-		public override IDbCommand InitCommand(DataConnection dataConnection, IDbCommand command, CommandType commandType, string commandText, DataParameter[]? parameters, bool withParameters)
+		public override DbCommand InitCommand(DataConnection dataConnection, DbCommand command, CommandType commandType, string commandText, DataParameter[]? parameters, bool withParameters)
 		{
 			command = base.InitCommand(dataConnection, command, commandType, commandText, parameters, withParameters);
 

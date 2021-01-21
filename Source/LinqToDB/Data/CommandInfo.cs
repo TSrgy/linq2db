@@ -187,10 +187,10 @@ namespace LinqToDB.Data
 			{
 				while (rd.DataReader!.Read())
 					yield return objectReader(rd.DataReader!);
-			}
 
-			if (Parameters?.Length > 0)
-				RebindParameters(DataConnection, Parameters!);
+				if (rd.Command?.Parameters.Count > 0 && Parameters?.Length > 0)
+					RebindParameters(DataConnection, rd.Command, Parameters);
+			}
 		}
 
 		#endregion
@@ -338,15 +338,15 @@ namespace LinqToDB.Data
 
 						} while (rd.DataReader!.Read());
 					}
+
+					if (rd.Command?.Parameters.Count > 0 && Parameters?.Length > 0)
+						RebindParameters(DataConnection, rd.Command, Parameters);
 				}
 				finally
 				{
 					if (disposeReader)
 						rd.Dispose();
 				}
-
-			if (Parameters?.Length > 0)
-				RebindParameters(DataConnection, Parameters!);
 		}
 
 		#endregion
@@ -510,7 +510,7 @@ namespace LinqToDB.Data
 		public T QueryMultiple<T>()
 			where T : class
 		{
-			var hasParameters = InitCommand();
+			InitCommand();
 
 			T result;
 
@@ -518,10 +518,10 @@ namespace LinqToDB.Data
 			using (var rd = DataConnection.ExecuteDataReader(GetCommandBehavior()))
 			{
 				result = ReadMultipleResultSets<T>(rd.DataReader!);
-			}
 
-			if (hasParameters)
-				RebindParameters(DataConnection, Parameters!);
+				if (rd.Command?.Parameters.Count > 0 && Parameters?.Length > 0)
+					RebindParameters(DataConnection, rd.Command, Parameters);
+			}
 
 			return result;
 		}
@@ -540,7 +540,7 @@ namespace LinqToDB.Data
 			where T : class
 		{
 			await DataConnection.EnsureConnectionAsync(cancellationToken).ConfigureAwait(Configuration.ContinueOnCapturedContext);
-			var hasParameters = InitCommand();
+			InitCommand();
 
 			T result;
 
@@ -551,10 +551,10 @@ namespace LinqToDB.Data
 			using (var rd = await DataConnection.ExecuteDataReaderAsync(GetCommandBehavior(), cancellationToken).ConfigureAwait(Configuration.ContinueOnCapturedContext))
 			{
 				result = await ReadMultipleResultSetsAsync<T>(rd.DataReader!, cancellationToken).ConfigureAwait(Configuration.ContinueOnCapturedContext);
-			}
 
-			if (hasParameters)
-				RebindParameters(DataConnection, Parameters!);
+				if (rd.Command?.Parameters.Count > 0 && Parameters?.Length > 0)
+					RebindParameters(DataConnection, rd.Command, Parameters);
+			}
 
 			return result;
 		}
@@ -824,12 +824,12 @@ namespace LinqToDB.Data
 		/// <returns>Number of records, affected by command execution.</returns>
 		public int Execute()
 		{
-			var hasParameters = InitCommand();
+			InitCommand();
 
 			var commandResult = DataConnection.ExecuteNonQuery();
 
-			if (hasParameters)
-				RebindParameters(DataConnection, Parameters!);
+			if (DataConnection.CurrentCommand?.Parameters.Count > 0 && Parameters?.Length > 0)
+				RebindParameters(DataConnection, DataConnection.CurrentCommand, Parameters);
 
 			return commandResult;
 		}
@@ -859,12 +859,12 @@ namespace LinqToDB.Data
 		{
 			await DataConnection.EnsureConnectionAsync(cancellationToken).ConfigureAwait(Configuration.ContinueOnCapturedContext);
 
-			var hasParameters = InitCommand();
+			InitCommand();
 
 			var commandResult = await DataConnection.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(Configuration.ContinueOnCapturedContext);
 
-			if (hasParameters)
-				RebindParameters(DataConnection, Parameters!);
+			if (DataConnection.CurrentCommand?.Parameters.Count > 0 && Parameters?.Length > 0)
+				RebindParameters(DataConnection, DataConnection.CurrentCommand, Parameters);
 
 			return commandResult;
 		}
@@ -922,10 +922,10 @@ namespace LinqToDB.Data
 						result = GetObjectReader2<T>(DataConnection, rd.DataReader!, CommandText, additionalKey)(rd.DataReader!);
 					}
 				}
-			}
 
-			if (hasParameters)
-				RebindParameters(DataConnection, Parameters!);
+				if (rd.Command?.Parameters.Count > 0 && Parameters?.Length > 0)
+					RebindParameters(DataConnection, rd.Command, Parameters);
+			}
 
 			return result;
 		}
@@ -979,10 +979,10 @@ namespace LinqToDB.Data
 						result = GetObjectReader2<T>(DataConnection, rd.DataReader!, CommandText, additionalKey)(rd.DataReader!);
 					}
 				}
-			}
 
-			if (hasParameters)
-				RebindParameters(DataConnection, Parameters!);
+				if (rd.Command?.Parameters.Count > 0 && Parameters?.Length > 0)
+					RebindParameters(DataConnection, rd.Command, Parameters);
+			}
 
 			return result;
 		}
@@ -1022,7 +1022,13 @@ namespace LinqToDB.Data
 
 			return new DataReader(this, DataConnection.ExecuteDataReader(GetCommandBehavior()))
 			{
-				OnDispose = hasParameters ? () => RebindParameters(DataConnection, Parameters!) : (Action?)null
+				OnDispose = hasParameters
+					? rd =>
+					{
+						if (rd.ReaderWrapper?.Command?.Parameters.Count > 0)
+							RebindParameters(DataConnection, rd.ReaderWrapper.Command, Parameters);
+					}
+					: null
 			};
 		}
 
@@ -1094,7 +1100,13 @@ namespace LinqToDB.Data
 
 			return new DataReaderAsync(this, await DataConnection.ExecuteDataReaderAsync(GetCommandBehavior(), cancellationToken).ConfigureAwait(Configuration.ContinueOnCapturedContext))
 			{
-				OnDispose = hasParameters ? () => RebindParameters(DataConnection, Parameters!) : (Action?)null
+				OnDispose = hasParameters
+					? rd =>
+					{
+						if (rd.ReaderWrapper?.Command?.Parameters.Count > 0)
+							RebindParameters(DataConnection, rd.ReaderWrapper.Command, Parameters);
+					}
+				: null
 			};
 		}
 
@@ -1178,10 +1190,15 @@ namespace LinqToDB.Data
 				if (dbDataType.DataType == DataType.Undefined && value != null)
 					dbDataType = dbDataType.WithDataType(dataConnection.MappingSchema.GetDataType(value.GetType()).Type.DataType);
 
-				if (parameter.Direction != null) p.Direction =       parameter.Direction.Value;
-				if (parameter.Size      != null) p.Size      =       parameter.Size     .Value;
+				if (parameter.Direction != null) p.Direction = parameter.Direction.Value;
+				if (parameter.Size      != null) p.Size      = parameter.Size     .Value;
+#if NET45
+				if (parameter.Precision != null) ((IDbDataParameter)p).Precision = (byte)parameter.Precision.Value;
+				if (parameter.Scale     != null) ((IDbDataParameter)p).Scale     = (byte)parameter.Scale    .Value;
+#else
 				if (parameter.Precision != null) p.Precision = (byte)parameter.Precision.Value;
-				if (parameter.Scale     != null) p.Scale     = (byte)parameter.Scale    .Value;
+				if (parameter.Scale     != null) p.Scale     = (byte)parameter.Scale.Value;
+#endif
 
 				dataConnection.DataProvider.SetParameter(dataConnection, p, parameter.Name!, dbDataType, value);
 				// some providers (e.g. managed sybase provider) could change parameter name
@@ -1212,14 +1229,14 @@ namespace LinqToDB.Data
 			return result;
 		}
 
-		static void RebindParameters(DataConnection dataConnection, DataParameter[] parameters)
+		static void RebindParameters(DataConnection dataConnection, DbCommand command, DataParameter[] parameters)
 		{
 			foreach (var dataParameter in parameters)
 			{
 				if (dataParameter.Direction.HasValue &&
 					(dataParameter.Direction == ParameterDirection.Output || dataParameter.Direction == ParameterDirection.InputOutput || dataParameter.Direction == ParameterDirection.ReturnValue))
 				{
-					var dbParameter      = dataConnection.LastParameters[dataParameter.Name!];
+					var dbParameter      = command.Parameters[dataParameter.Name!];
 					dataParameter.Output = dbParameter;
 
 					if (!object.Equals(dataParameter.Value, dbParameter.Value))
@@ -1390,9 +1407,9 @@ namespace LinqToDB.Data
 			return dataParameter;
 		}
 
-		#endregion
+#endregion
 
-		#region GetObjectReader
+#region GetObjectReader
 
 		struct QueryKey : IEquatable<QueryKey>
 		{
@@ -1625,6 +1642,6 @@ namespace LinqToDB.Data
 			return lex.Compile();
 		}
 
-		#endregion
+#endregion
 	}
 }

@@ -338,6 +338,62 @@ namespace SybaseDataActionDataContext
 		[Column,     Nullable] public int? Field { get; set; } // int
 	}
 
+	public static partial class TestDataCoreDBStoredProcedures
+	{
+		#region AddIssue792Record
+
+		public static int AddIssue792Record(this TestDataCoreDB dataConnection, out int? RETURN_VALUE)
+		{
+			var parameters = new []
+			{
+				new DataParameter("RETURN_VALUE", null, LinqToDB.DataType.Int32)
+				{
+					Direction = ParameterDirection.ReturnValue,
+					Size      = 10
+				}
+			};
+
+			var ret = dataConnection.ExecuteProc("[dbo].[AddIssue792Record]", parameters);
+
+			RETURN_VALUE = Converter.ChangeTypeTo<int?>(parameters[0].Value);
+
+			return ret;
+		}
+
+		#endregion
+
+		#region PersonSelectAll
+
+		public static IEnumerable<PersonSelectAllResult> PersonSelectAll(this TestDataCoreDB dataConnection, out int? RETURN_VALUE)
+		{
+			var parameters = new []
+			{
+				new DataParameter("RETURN_VALUE", null, LinqToDB.DataType.Int32)
+				{
+					Direction = ParameterDirection.ReturnValue,
+					Size      = 10
+				}
+			};
+
+			var ret = dataConnection.QueryProc<PersonSelectAllResult>("[dbo].[Person_SelectAll]", parameters).ToList();
+
+			RETURN_VALUE = Converter.ChangeTypeTo<int?>(parameters[0].Value);
+
+			return ret;
+		}
+
+		public partial class PersonSelectAllResult
+		{
+			public int     PersonID   { get; set; }
+			public string  FirstName  { get; set; } = null!;
+			public string  LastName   { get; set; } = null!;
+			public string? MiddleName { get; set; }
+			public string  Gender     { get; set; } = null!;
+		}
+
+		#endregion
+	}
+
 	public static partial class TableExtensions
 	{
 		public static Doctor? Find(this ITable<Doctor> table, int PersonID)

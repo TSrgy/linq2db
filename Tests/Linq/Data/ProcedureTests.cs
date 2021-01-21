@@ -168,9 +168,6 @@ namespace Tests.Data
 
 				Assert.AreEqual(2, output1.Value);
 				Assert.AreEqual(3, output2.Value);
-
-				Assert.AreEqual(2, db.LastParameters["output1"].Value);
-				Assert.AreEqual(3, db.LastParameters["output2"].Value);
 			}
 		}
 
@@ -190,10 +187,6 @@ namespace Tests.Data
 
 				Assert.AreEqual(2, output1.Value);
 				Assert.AreEqual(3, output2.Value);
-
-				Assert.AreEqual(2, db.LastParameters["output1"].Value);
-				Assert.AreEqual(3, db.LastParameters["output2"].Value);
-
 			}
 		}
 
@@ -211,9 +204,6 @@ namespace Tests.Data
 
 				Assert.AreEqual(2, output1.Value);
 				Assert.AreEqual(3, output2.Value);
-
-				Assert.AreEqual(2, db.LastParameters["output1"].Value);
-				Assert.AreEqual(3, db.LastParameters["output2"].Value);
 			}
 		}
 
@@ -233,9 +223,6 @@ namespace Tests.Data
 
 				Assert.AreEqual(2, output1.Value);
 				Assert.AreEqual(3, output2.Value);
-
-				Assert.AreEqual(2, db.LastParameters["output1"].Value);
-				Assert.AreEqual(3, db.LastParameters["output2"].Value);
 			}
 		}
 
@@ -255,9 +242,6 @@ namespace Tests.Data
 
 				Assert.AreEqual(2, output1.Value);
 				Assert.AreEqual(3, output2.Value);
-
-				Assert.AreEqual(2, db.LastParameters["output1"].Value);
-				Assert.AreEqual(3, db.LastParameters["output2"].Value);
 			}
 		}
 
@@ -277,9 +261,6 @@ namespace Tests.Data
 
 				Assert.AreEqual(2, output1.Value);
 				Assert.AreEqual(3, output2.Value);
-
-				Assert.AreEqual(2, db.LastParameters["output1"].Value);
-				Assert.AreEqual(3, db.LastParameters["output2"].Value);
 			}
 		}
 
