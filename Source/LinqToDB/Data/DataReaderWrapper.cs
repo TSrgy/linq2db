@@ -31,6 +31,8 @@ namespace LinqToDB.Data
 		public  DbDataReader? DataReader { get; private set; }
 		internal DbCommand?   Command    { get; }
 
+		internal Action<DbCommand>? OnBeforeCommandDispose { get; set; }
+
 		public void Dispose()
 		{
 			if (_disposed)
@@ -46,6 +48,9 @@ namespace LinqToDB.Data
 
 			if (Command != null)
 			{
+				OnBeforeCommandDispose?.Invoke(Command);
+				OnBeforeCommandDispose = null;
+
 				if (_dataConnection != null)
 					_dataConnection.DataProvider.DisposeCommand(Command);
 				else

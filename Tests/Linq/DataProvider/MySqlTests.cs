@@ -1945,7 +1945,10 @@ namespace Tests.DataProvider
 				}
 			};
 
-			var ret = dataConnection.QueryProc<Person>("`TestProcedure`", parameters).ToList();
+			// WORKAROUND: db name needed for MySql.Data 8.0.21, as they managed to break already escaped procedure name handling
+			var dbName = dataConnection.DataProvider.CreateSqlBuilder(dataConnection.MappingSchema).ConvertInline(TestUtils.GetDatabaseName(dataConnection), ConvertType.NameToDatabase);
+
+			var ret = dataConnection.QueryProc<Person>($"{dbName}.`TestProcedure`", parameters).ToList();
 
 			param2 = Converter.ChangeTypeTo<int?>(parameters[1].Value);
 			param1 = Converter.ChangeTypeTo<int?>(parameters[2].Value);

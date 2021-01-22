@@ -20,7 +20,6 @@ namespace LinqToDB.Data
 		internal CancellationToken        CancellationToken { get; set; }
 		private  DateTime                 StartedOn         { get; }      = DateTime.UtcNow;
 		private  Stopwatch                Stopwatch         { get; }      = Stopwatch.StartNew();
-		internal Action<DataReaderAsync>? OnDispose         { get; set; }
 
 		public DataReaderAsync(CommandInfo commandInfo, DataReaderWrapper dataReader)
 		{
@@ -30,8 +29,6 @@ namespace LinqToDB.Data
 
 		public void Dispose()
 		{
-			OnDispose?.Invoke(this);
-
 			if (ReaderWrapper != null)
 			{
 				if (CommandInfo?.DataConnection.TraceSwitchConnection.TraceInfo == true)
@@ -55,8 +52,6 @@ namespace LinqToDB.Data
 #if NETSTANDARD2_1PLUS
 		public async ValueTask DisposeAsync()
 		{
-			OnDispose?.Invoke(this);
-
 			if (ReaderWrapper != null)
 			{
 				if (CommandInfo?.DataConnection.TraceSwitchConnection.TraceInfo == true)

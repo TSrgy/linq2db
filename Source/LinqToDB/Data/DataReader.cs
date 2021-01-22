@@ -16,7 +16,6 @@ namespace LinqToDB.Data
 		internal int                 ReadNumber    { get; set; }
 		private  DateTime            StartedOn     { get; }      = DateTime.UtcNow;
 		private  Stopwatch           Stopwatch     { get; }      = Stopwatch.StartNew();
-		internal Action<DataReader>? OnDispose     { get; set; }
 
 		public DataReader(CommandInfo commandInfo, DataReaderWrapper dataReader)
 		{
@@ -26,8 +25,6 @@ namespace LinqToDB.Data
 
 		public void Dispose()
 		{
-			OnDispose?.Invoke(this);
-
 			if (ReaderWrapper != null)
 			{
 				if (CommandInfo?.DataConnection.TraceSwitchConnection.TraceInfo == true)
