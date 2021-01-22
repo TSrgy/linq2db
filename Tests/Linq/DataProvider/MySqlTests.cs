@@ -1906,7 +1906,7 @@ namespace Tests.DataProvider
 
 	internal static class MySqlTestFunctions
 	{
-		public static int TestOutputParametersWithoutTableProcedure(this DataConnection dataConnection, string? aInParam, out bool? aOutParam)
+		public static int TestOutputParametersWithoutTableProcedure(this DataConnection dataConnection, string? aInParam, out sbyte? aOutParam)
 		{
 			var parameters = new []
 			{
@@ -1925,7 +1925,7 @@ namespace Tests.DataProvider
 
 			var ret = dataConnection.ExecuteProc($"{dbName}.`TestOutputParametersWithoutTableProcedure`", parameters);
 
-			aOutParam = Converter.ChangeTypeTo<bool?>(parameters[1].Value);
+			aOutParam = Converter.ChangeTypeTo<sbyte?>(parameters[1].Value);
 
 			return ret;
 		}
