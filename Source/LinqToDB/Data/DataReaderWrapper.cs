@@ -72,8 +72,10 @@ namespace LinqToDB.Data
 				DataReader = null;
 			}
 
-			if (Command != null && _dataConnection != null)
+			if (Command != null)
 			{
+				OnBeforeCommandDispose?.Invoke(Command);
+
 				if (_dataConnection != null)
 					_dataConnection.DataProvider.DisposeCommand(Command);
 				else
